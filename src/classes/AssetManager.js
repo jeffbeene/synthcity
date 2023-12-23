@@ -3,6 +3,7 @@ import {
   TextureLoader,
   EquirectangularReflectionMapping,
   LinearFilter,
+  SRGBColorSpace,
   RepeatWrapping,
   PlaneGeometry,
   MeshPhongMaterial,
@@ -15,20 +16,22 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
 class AssetManager {
 
-  constructor(game, path) {
+  constructor() {
 
-    this.game = game;
-
-    this.path = path;
+    this.path = '';
 
     this.textureAnisotropy = 8;
     this.buildingWindowsEmissiveIntensity = 1.5;
-    this.adsEmissiveIntensity = 0.2;
+    this.adsEmissiveIntensity = 0.05;
 
     this.textures = {};
     this.models = {};
     this.materials = {};
 
+  }
+
+  setPath(path) {
+    this.path = path;
   }
 
   load() {
@@ -45,7 +48,7 @@ class AssetManager {
     };
     this.loadingManager.onLoad = function () {
       console.log( 'AssetManager: Assets loaded' );
-      self.game.onLoad();
+      window.game.onLoad();
     };
     this.loadingManager.onError = function ( url ) {
       console.error( 'AssetManager: Failed to load ' + url );
@@ -57,6 +60,7 @@ class AssetManager {
     /*----- textures -----*/
 
     this.textures['sky_night'] = this.textureLoader.load(this.path+'textures/sky_night.jpg');
+    this.textures['sky_night'].colorSpace = SRGBColorSpace;
     this.textures['sky_night'].mapping = EquirectangularReflectionMapping;
     this.textures['sky_night'].magFilter = LinearFilter;
 
@@ -196,7 +200,7 @@ class AssetManager {
       map: this.getTexture('ground'),
       emissive: 0x00d2ff,
       emissiveMap: this.getTexture('ground_em'),
-      emissiveIntensity: 0.35,
+      emissiveIntensity: 0.2,
       shininess: 0
     });
 
@@ -224,30 +228,31 @@ class AssetManager {
         specular: 0xffffff,
         specularMap: this.getTexture('building_'+id+'_rough'),
         envMap: this.getTexture('env_night'),
-        emissive: new Color("hsl("+(Math.random()*360)+", 100%, 90%)"),
+        emissive: new Color("hsl("+(Math.random()*360)+", 100%, 95%)"),
         emissiveMap: this.getTexture('building_'+id+'_em'),
         emissiveIntensity: this.buildingWindowsEmissiveIntensity,
         bumpMap: this.getTexture('building_'+id),
-        bumpScale: 0.05
+        bumpScale: 5
       });
     }
 
     // mega building
     this.materials['mega_building_01'] = new MeshPhongMaterial({
       map: this.getTexture('mega_building_01'),
-      specular: 0xffffff,
+      specular: 0x777777,
+      shininess: 1,
       emissive: 0xffffff,
       emissiveMap: this.getTexture('mega_building_01_em'),
       emissiveIntensity: this.buildingWindowsEmissiveIntensity,
       bumpMap: this.getTexture('mega_building_01'),
-      bumpScale: 1
+      bumpScale: 10
     });
 
     // ads small
     for (let i=0; i<5; i++) {
       let id = this.padNumber(i+1);
       this.materials['ads_'+id] = new MeshPhongMaterial({
-        map: this.getTexture('ads_'+id),
+        // map: this.getTexture('ads_'+id),
         emissive: 0xffffff,
         emissiveMap: this.getTexture('ads_'+id),
         emissiveIntensity: this.adsEmissiveIntensity,
@@ -261,7 +266,7 @@ class AssetManager {
     for (let i=0; i<5; i++) {
       let id = this.padNumber(i+1);
       this.materials['ads_large_'+id] = new MeshPhongMaterial({
-        map: this.getTexture('ads_large_'+id),
+        // map: this.getTexture('ads_large_'+id),
         emissive: 0xffffff,
         emissiveMap: this.getTexture('ads_large_'+id),
         emissiveIntensity: this.adsEmissiveIntensity,

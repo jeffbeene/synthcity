@@ -18,9 +18,9 @@ class Player {
 		this.look_roll_factor = 0.1;
 		this.max_look_speed = 200;
 
-		this.move_accel = 0.5;//0.01;
+		this.move_accel = 0.25;//0.01;
 
-		this.walk_speed = 1;//0.1;
+		this.walk_speed = 0.65;//0.1;
 		this.run_speed = 4;//0.2;
 
 		// init
@@ -28,7 +28,7 @@ class Player {
     this.camera_fov = 80;
     this.camera_fov_to = this.camera_fov;
 
-		this.camera = new THREE.PerspectiveCamera( this.camera_fov, window.innerWidth / window.innerHeight, .1, 2800 );
+		this.camera = new THREE.PerspectiveCamera( this.camera_fov, window.innerWidth / window.innerHeight, 1, 2800 );
 		this.camera.rotation.order = 'YXZ';
 		this.camera.rotation.y = Math.PI;
 		this.camera.position.y = this.player_height;

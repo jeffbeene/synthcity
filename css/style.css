@@ -4,6 +4,10 @@ body {
 	overflow: hidden;
 }
 
+/* canvas {
+  image-rendering: pixelated;
+} */
+
 #blocker {
 	position: absolute;
 	width: 100%;

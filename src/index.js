@@ -3,26 +3,32 @@ import {
   Scene,
   WebGLRenderer,
   ACESFilmicToneMapping,
+  SRGBColorSpace,
   PerspectiveCamera,
-  BoxGeometry,
-  MeshBasicMaterial,
-  Mesh,
+  Vector2,
   Fog,
   DirectionalLight,
-  AmbientLight
+  AmbientLight,
+  PointLight
 } from 'three';
 
 import { PointerLockControls }  from 'three/examples/jsm/controls/PointerLockControls.js';
-
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 
 import { AssetManager } from './classes/AssetManager.js';
 
 import { Player } from './classes/Player.js';
 import { PlayerController } from './classes/PlayerController.js';
 
-new Game();
+import { Generator } from './classes/Generator.js';
+import { GeneratorItem_CityBlock } from './classes/GeneratorItem_CityBlock.js';
+import { GeneratorItem_CityLight } from './classes/GeneratorItem_CityLight.js';
+
+window.game = new Game();
 
 class Game {
 
@@ -31,11 +37,17 @@ class Game {
     // settings
 
     this.environment = this.getEnvironment('night');
-    this.pixelRatioFactor = 1.0;
+    this.pixelRatioFactor = 1.5;
+
+    // 9746
+    // 4217
+    // 5794
+    this.seed = Math.round(Math.random()*10000);
 
     // load
 
-    this.assets = new AssetManager(this, 'assets/');
+    this.assets = new AssetManager();
+    this.assets.setPath('assets/');
     this.assets.load();
 
   }
@@ -63,6 +75,8 @@ class Game {
     this.renderer.setPixelRatio( window.devicePixelRatio*this.pixelRatioFactor );
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     this.renderer.toneMapping = ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.0;
+    this.renderer.outputColorSpace = SRGBColorSpace;
     document.body.appendChild( this.renderer.domElement );
 
     // scene
@@ -93,11 +107,27 @@ class Game {
     this.composer = new EffectComposer( this.renderer );
     this.composer.addPass( new RenderPass( this.scene, this.player.camera ) );
 
+    // anti aliasing
+    const fxaa = new ShaderPass( FXAAShader );
+    const pixelRatio = this.renderer.getPixelRatio();
+    fxaa.material.uniforms[ 'resolution' ].value.x = 1 / ( window.innerWidth * pixelRatio );
+    fxaa.material.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * pixelRatio );
+    this.composer.addPass( fxaa );
+
+    // bloom fog
+    const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 0, 0, 0 );
+    bloomPass.threshold = 0.0;
+    bloomPass.strength = 10.0;
+    bloomPass.radius = 1.0;
+    this.composer.addPass( bloomPass );
+
     /*----- environment -----*/
 
     // sky and fog
 
     this.scene.background = this.assets.getTexture(this.environment.sky);
+
+    // this.scene.environment = this.assets.getTexture(this.environment.environmentMap);
     
     this.scene.fog = new Fog(this.environment.fog.color, this.environment.fog.start, this.environment.fog.end);
 
@@ -114,12 +144,44 @@ class Game {
     const light_ambient = new AmbientLight( this.environment.ambient.color, this.environment.ambient.intensity );
     this.scene.add( light_ambient );
 
-    // test stuff
+    /*----- generators -----*/
 
-    const geometry = new BoxGeometry( 1, 1, 1 );
-    const material = new MeshBasicMaterial( { color: 0x00ff00 } );
-    const cube = new Mesh( geometry, material );
-    this.scene.add( cube );
+    this.cityBlockSize = 128;
+    this.roadWidth = 24;
+
+    this.cityBlockNoise = new Perlin(this.seed);
+    this.cityBlockNoise.noiseDetail(8, 0.5);
+    this.cityBlockNoiseFactor = 0.0017;
+
+    this.generatorCityBlock = new Generator({
+      camera: this.player.camera,
+      cell_size: this.cityBlockSize+this.roadWidth,
+      cell_count: 40,
+      spawn_obj: GeneratorItem_CityBlock
+    });
+
+    this.cityLights = [];
+    this.generatorCityLights = null;
+    if (this.environment.cityLights) {
+      // create lights
+      for (let i=0; i<10; i++) {
+        let light = new PointLight( 0x000000, 100, 2000 );
+        light.decay = 1;
+        let l = {
+          light: light,
+          free: true
+        }
+        this.scene.add(l.light);
+        this.cityLights.push(l);
+      }
+      // create generator
+      this.generatorCityLights = new Generator({
+        camera: this.player.camera,
+        cell_size: (this.cityBlockSize+this.roadWidth)*4,
+        cell_count: 8,
+        spawn_obj: GeneratorItem_CityLight
+      });
+    }
 
     /*----- animate -----*/
 
@@ -155,6 +217,9 @@ class Game {
     this.player.update();
     this.playerController.update();
 
+    this.generatorCityBlock.update();
+    if (this.generatorCityLights!==null) this.generatorCityLights.update();
+
     // render
 
     this.composer.render();
@@ -166,25 +231,25 @@ class Game {
     const environments = {
       night: {
         sky: 'sky_night',
-        evironmentMap: 'env_night',
+        environmentMap: 'env_night',
         cityLights: true,
         windowLights: true,
         spotLights: true,
         fog: {
-          color: 0x0f0d2d,
+          color: 0x12122a,
           start: 0,
           end: 2700
         },
         sun: {
-          color: 0x080d27,
-          intensity: 2.0,
-          x: 64,
-          y: 52,
-          z: -15,
+          color: 0x8b79ff,
+          intensity: 0.1,
+          x: 1,
+          y: 0.5,
+          z: 0.25,
         },
         ambient: {
-          color: 0x080d27,
-          intensity: 1.0,
+          color: 0x1b2c80,
+          intensity: 0.5,
         }
       }
     };
