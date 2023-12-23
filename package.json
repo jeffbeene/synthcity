@@ -1,0 +1,20 @@
+{
+  "name": "cyberpunk",
+  "version": "1.0.0",
+  "description": "Infinite procedural city in three.js",
+  "author": "Jeff Beene",
+  "license": "ISC",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "three": "^0.159.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.78.0",
+    "webpack-cli": "^5.0.1"
+  }
+}
