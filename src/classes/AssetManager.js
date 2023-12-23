@@ -44,7 +44,7 @@ class AssetManager {
 
     this.loadingManager = new LoadingManager();
     this.loadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-      console.log( 'AssetManager: ' + itemsLoaded + ' of ' + itemsTotal + ' files loaded' );
+      // console.log( 'AssetManager: ' + itemsLoaded + ' of ' + itemsTotal + ' files loaded' );
     };
     this.loadingManager.onLoad = function () {
       console.log( 'AssetManager: Assets loaded' );
@@ -198,7 +198,7 @@ class AssetManager {
 
     this.materials['ground'] = new MeshPhongMaterial({
       map: this.getTexture('ground'),
-      emissive: 0x00d2ff,
+      emissive: 0x0090ff,
       emissiveMap: this.getTexture('ground_em'),
       emissiveIntensity: 0.2,
       shininess: 0

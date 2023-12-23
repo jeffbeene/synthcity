@@ -42,7 +42,7 @@ class Game {
     // 9746
     // 4217
     // 5794
-    this.seed = Math.round(Math.random()*10000);
+    this.seed = 9746;//Math.round(Math.random()*10000);
 
     // load
 
@@ -83,9 +83,9 @@ class Game {
 
     this.scene = new Scene();
 
-    // camera
+    // camera (for pointer lock controls, player creates own camera)
 
-    this.camera = new PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 ); // for pointer lock controls, player creates own camera
+    this.camera = new PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
 
     // controls
 
@@ -114,10 +114,10 @@ class Game {
     fxaa.material.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * pixelRatio );
     this.composer.addPass( fxaa );
 
-    // bloom fog
+    // bloom
     const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 0, 0, 0 );
     bloomPass.threshold = 0.0;
-    bloomPass.strength = 10.0;
+    bloomPass.strength = 8.0;
     bloomPass.radius = 1.0;
     this.composer.addPass( bloomPass );
 
@@ -151,7 +151,7 @@ class Game {
 
     this.cityBlockNoise = new Perlin(this.seed);
     this.cityBlockNoise.noiseDetail(8, 0.5);
-    this.cityBlockNoiseFactor = 0.0017;
+    this.cityBlockNoiseFactor = 0.0017;//0.0017;
 
     this.generatorCityBlock = new Generator({
       camera: this.player.camera,
