@@ -20,13 +20,16 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 
 import { AssetManager } from './classes/AssetManager.js';
+import { Shaders } from './classes/Shaders.js';
 
 import { Player } from './classes/Player.js';
+import { PlayerCar } from './classes/PlayerCar.js';
 import { PlayerController } from './classes/PlayerController.js';
 
 import { Generator } from './classes/Generator.js';
 import { GeneratorItem_CityBlock } from './classes/GeneratorItem_CityBlock.js';
 import { GeneratorItem_CityLight } from './classes/GeneratorItem_CityLight.js';
+import { GeneratorItem_Traffic } from './classes/GeneratorItem_Traffic.js';
 
 window.game = new Game();
 
@@ -94,7 +97,15 @@ class Game {
 
     // player
 
-    this.player = new Player({
+    // this.player = new Player({
+    //   scene: this.scene,
+    //   renderer: this.renderer,
+    //   controller: this.playerController,
+    //   x: 0,
+    //   z: 0
+    // });
+
+    this.player = new PlayerCar({
       scene: this.scene,
       renderer: this.renderer,
       controller: this.playerController,
@@ -103,6 +114,8 @@ class Game {
     });
 
     /*----- post processing -----*/
+
+    this.shaders = new Shaders();
 
     this.composer = new EffectComposer( this.renderer );
     this.composer.addPass( new RenderPass( this.scene, this.player.camera ) );
@@ -117,9 +130,16 @@ class Game {
     // bloom
     const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 0, 0, 0 );
     bloomPass.threshold = 0.0;
-    bloomPass.strength = 8.0;
+    bloomPass.strength = 7.0;
     bloomPass.radius = 1.0;
     this.composer.addPass( bloomPass );
+
+    // sharpen
+    // const sharpenEffect = new ShaderPass( this.shaders.getSharpenShaderDefinition() );
+    // sharpenEffect.uniforms.width.value = window.innerWidth/1;
+    // sharpenEffect.uniforms.height.value = window.innerHeight/1;
+    // this.composer.addPass( sharpenEffect );
+   
 
     /*----- environment -----*/
 
@@ -183,6 +203,14 @@ class Game {
       });
     }
 
+    this.generatorTraffic = new Generator({
+      camera: this.player.camera,
+      cell_size: this.cityBlockSize+this.roadWidth,
+      cell_count: 12,
+      debug: false,
+      spawn_obj: GeneratorItem_Traffic
+    });
+
     /*----- animate -----*/
 
     // time
@@ -219,6 +247,7 @@ class Game {
 
     this.generatorCityBlock.update();
     if (this.generatorCityLights!==null) this.generatorCityLights.update();
+    this.generatorTraffic.update();
 
     // render
 
