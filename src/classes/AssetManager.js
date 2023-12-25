@@ -9,9 +9,12 @@ import {
   MeshPhongMaterial,
   MeshStandardMaterial,
   MeshPhysicalMaterial,
+  ShaderMaterial,
   Color,
   AdditiveBlending,
-  DoubleSide
+  DoubleSide,
+  MeshBasicMaterial,
+  Vector2
 } from 'three';
 
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
@@ -70,6 +73,10 @@ class AssetManager {
     this.textures['env_night'].mapping = EquirectangularReflectionMapping;
     this.textures['env_night'].magFilter = LinearFilter;
 
+    this.textures['env_night_windshield'] = this.textureLoader.load(this.path+'textures/environment_night_windshield.jpg');
+    this.textures['env_night_windshield'].mapping = EquirectangularReflectionMapping;
+    this.textures['env_night_windshield'].magFilter = LinearFilter;
+
     this.textures['ground'] = this.textureLoader.load(this.path+'textures/ground.jpg');
     this.textures['ground_em'] = this.textureLoader.load(this.path+'textures/ground_em.jpg');
 
@@ -83,7 +90,7 @@ class AssetManager {
       this.textures['spinner_windows_norm'].wrapS = RepeatWrapping;
       this.textures['spinner_windows_norm'].wrapT = RepeatWrapping;
       this.textures['spinner_windows_norm'].repeat.set( 2.5, 2.5 );
-    this.textures['spinner_windows_rough'] = this.textureLoader.load(this.path+'textures/smudges2_1024.jpg');
+    this.textures['spinner_windows_rough'] = this.textureLoader.load(this.path+'textures/smudges3_512.jpg');
       this.textures['spinner_windows_rough'].wrapS = RepeatWrapping;
       this.textures['spinner_windows_rough'].wrapT = RepeatWrapping;
       this.textures['spinner_windows_rough'].repeat.set( 2.5, 2.5 );
@@ -250,19 +257,43 @@ class AssetManager {
       map: this.getTexture('spinner_exterior'),
       shininess: 0
     } );
-    this.materials['spinner_windows'] = new MeshPhysicalMaterial( {
-      color: 0xffffff,
-      transparent: false,
-      opacity: 1,
-      roughness: 0.5,
-      roughnessMap: this.getTexture('spinner_windows_rough'),
-      metalness: 0,
-      reflectivity: 1, //0.5
-      transmission: 1,
-      transmissionMap: this.getTexture('spinner_windows_trans'),
-      thickness: 0.01,
-      normalMap: this.getTexture('spinner_windows_norm')
+
+    // this.materials['spinner_windows'] = new MeshPhysicalMaterial( {
+    //   color: 0xffffff,
+    //   transparent: false,
+    //   opacity: 1,
+    //   roughness: 0.5,
+    //   roughnessMap: this.getTexture('spinner_windows_rough'),
+    //   metalness: 0,
+    //   reflectivity: 1, //0.5
+    //   transmission: 1,
+    //   transmissionMap: this.getTexture('spinner_windows_trans'),
+    //   thickness: 0.01,
+    //   normalMap: this.getTexture('spinner_windows_norm')
+    // } );
+   
+    this.materials['spinner_windows'] = new MeshStandardMaterial( {
+      color: 0x808080,
+      transparent: true,
+      opacity: 0.1,
+      envMap: this.getTexture('env_night_windshield'),
+      roughness: 0,
+      metalness: 1,
+      normalMap: this.getTexture('spinner_windows_norm'),
+      blending: AdditiveBlending
     } );
+    
+    // this.materials['spinner_windows'] = new MeshPhongMaterial( {
+    //   color: 0xffffff,
+    //   transparent: true,
+    //   opacity: 1,
+    //   envMap: this.getTexture('env_night_windshield'),
+    //   reflectivity: 1,
+    //   specular: 0xffffff,
+    //   shininess: 100,
+    //   normalMap: this.getTexture('spinner_windows_norm'),
+    //   blending: AdditiveBlending
+    // } );
 
     this.materials['cars'] = new MeshPhongMaterial({
       map: this.getTexture('cars'),

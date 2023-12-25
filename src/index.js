@@ -2,6 +2,7 @@ import {
   Clock,
   Scene,
   WebGLRenderer,
+  WebGLRenderTarget,
   ACESFilmicToneMapping,
   SRGBColorSpace,
   PerspectiveCamera,
@@ -9,7 +10,10 @@ import {
   Fog,
   DirectionalLight,
   AmbientLight,
-  PointLight
+  PointLight,
+  Texture,
+  NearestFilter,
+  ShaderMaterial
 } from 'three';
 
 import { PointerLockControls }  from 'three/examples/jsm/controls/PointerLockControls.js';
@@ -45,7 +49,12 @@ class Game {
     // 9746
     // 4217
     // 5794
-    this.seed = 9746;//Math.round(Math.random()*10000);
+    this.seed = Math.round(Math.random()*10000);
+
+    // elements
+
+    this.blocker = document.getElementById( 'blocker' );
+    this.canvas = document.getElementById('canvas');
 
     // load
 
@@ -66,11 +75,6 @@ class Game {
     console.log('Game: Initializing');
 
     /*----- setup -----*/
-
-    // elements
-
-    this.blocker = document.getElementById( 'blocker' );
-    this.canvas = document.getElementById('canvas');
 
     // renderer
 
@@ -109,16 +113,16 @@ class Game {
       scene: this.scene,
       renderer: this.renderer,
       controller: this.playerController,
-      x: 0,
+      x: -12,
       z: 0
     });
 
     /*----- post processing -----*/
 
-    this.shaders = new Shaders();
-
     this.composer = new EffectComposer( this.renderer );
-    this.composer.addPass( new RenderPass( this.scene, this.player.camera ) );
+
+    // render pass
+    this.composer.addPass(  new RenderPass( this.scene, this.player.camera ) );
 
     // anti aliasing
     const fxaa = new ShaderPass( FXAAShader );
@@ -133,13 +137,6 @@ class Game {
     bloomPass.strength = 7.0;
     bloomPass.radius = 1.0;
     this.composer.addPass( bloomPass );
-
-    // sharpen
-    // const sharpenEffect = new ShaderPass( this.shaders.getSharpenShaderDefinition() );
-    // sharpenEffect.uniforms.width.value = window.innerWidth/1;
-    // sharpenEffect.uniforms.height.value = window.innerHeight/1;
-    // this.composer.addPass( sharpenEffect );
-   
 
     /*----- environment -----*/
 
@@ -252,6 +249,7 @@ class Game {
     // render
 
     this.composer.render();
+    // this.renderer.render(this.scene, this.player.camera);
 
   }
 
