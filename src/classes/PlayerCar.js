@@ -33,6 +33,10 @@ class PlayerCar {
     this.light.decay = 1;
     this.scene.add( this.light );
 
+    // audio
+
+    this.soundWind = null;
+
 		// init
 
     this.car = null;
@@ -106,10 +110,11 @@ class PlayerCar {
     this.camera.position.z = this.camera.position.z + n*0.15;
     this.camera.position.y = this.camera.position.y + n*0.25;
     // shake camera rotation
-    var n = (this.noise_shake.noise(this.body.position.x*0.1, this.body.position.z*0.1) - 0.5);
-    this.camera.rotation.x = this.camera.rotation.x + n * 0.02 * Math.max(-this.car_pitch, 0);
-    this.camera.rotation.z = this.camera.rotation.z + n * -0.01 * Math.max(-this.car_pitch, 0);
-    this.camera.rotation.y = this.camera.rotation.y + n * 0.01 * Math.max(-this.car_pitch, 0);
+    var n = (this.noise_shake.noise(this.body.position.x*0.05, this.body.position.z*0.05) - 0.5);
+    var f = Math.min(Math.max(this.velocity.length() - this.walk_speed , 0), 1);
+    this.camera.rotation.x = this.camera.rotation.x + n * 0.01 * f;
+    // this.camera.rotation.z = this.camera.rotation.z + n * -0.005 * f;
+    this.camera.rotation.y = this.camera.rotation.y + n * 0.005 * f;
 
 		// smooth look
 		this.camera.quaternion.slerp(this.camera_target.quaternion, this.look_smooth);
@@ -164,9 +169,11 @@ class PlayerCar {
 
     /*--- UPDATE POSITION ---*/
 
-    this.velocity.z -= Math.cos(-this.car_dir+Math.PI) * Math.cos(this.car_pitch) * this.move_accel;
-    this.velocity.x += Math.sin(-this.car_dir+Math.PI) * Math.cos(this.car_pitch) * this.move_accel;
-    this.velocity.y += Math.sin(this.car_pitch) * this.move_accel;
+    let accel = this.controller.key_shift ? this.move_accel*2 : this.move_accel;
+
+    this.velocity.z -= Math.cos(-this.car_dir+Math.PI) * Math.cos(this.car_pitch) * accel;
+    this.velocity.x += Math.sin(-this.car_dir+Math.PI) * Math.cos(this.car_pitch) * accel;
+    this.velocity.y += Math.sin(this.car_pitch) * accel;
 
     // max speed
 		this.move_max_speed = this.controller.key_shift ? this.run_speed : this.walk_speed;
@@ -182,6 +189,10 @@ class PlayerCar {
     if (!this.autopilot) {
       this.body.position.y += this.velocity.y;
     }
+
+    /*--- UPDATE AUDIO ---*/
+
+    if (this.soundWind) this.soundWind.setVolume( Math.min(Math.max(this.velocity.length() - this.walk_speed , 0), 1) );
 
 	}
 

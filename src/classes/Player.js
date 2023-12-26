@@ -23,6 +23,11 @@ class Player {
 		this.walk_speed = 0.65;//0.1;
 		this.run_speed = 4;//0.2;
 
+    // audio
+
+    this.soundWind = null;
+    this.soundCityAmbient = null;
+
 		// init
 
     this.camera_fov = 80;
@@ -133,7 +138,12 @@ class Player {
       this.body.position.y = this.body.position.y/1.02;
     }
     if (this.body.position.y<15) this.body.position.y = 15;
-    if (this.body.position.y>600) this.body.position.y = 600;
+    if (this.body.position.y>800) this.body.position.y = 800;
+
+    /*--- UPDATE AUDIO ---*/
+
+    if (this.soundWind) this.soundWind.setVolume( Math.min(Math.max(this.velocity.length() - this.walk_speed , 0), 1)*0.1 );
+    if (this.soundCityAmbient) this.soundCityAmbient.setVolume( 1 - (this.body.position.y/800) );
 
 	}
 

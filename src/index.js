@@ -2,7 +2,6 @@ import {
   Clock,
   Scene,
   WebGLRenderer,
-  WebGLRenderTarget,
   ACESFilmicToneMapping,
   SRGBColorSpace,
   PerspectiveCamera,
@@ -11,9 +10,9 @@ import {
   DirectionalLight,
   AmbientLight,
   PointLight,
-  Texture,
-  NearestFilter,
-  ShaderMaterial
+  Audio,
+  AudioLoader,
+  AudioListener
 } from 'three';
 
 import { PointerLockControls }  from 'three/examples/jsm/controls/PointerLockControls.js';
@@ -41,7 +40,24 @@ class Game {
 
   constructor() {
 
-    // settings
+    // user settings
+
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+    this.settings = {
+      mode: 'car',
+      music: true,
+      soundFx: true
+    };
+
+    if (params.has('mode')) this.settings.mode = params.get('mode');
+    if (params.has('music')) this.settings.music = params.get('music');
+    if (params.has('soundFx')) this.settings.soundFx = params.get('soundFx');
+
+    //urlParams.get('soundFx')
+
+    // internal settings
 
     this.environment = this.getEnvironment('night');
     this.pixelRatioFactor = 1.5;
@@ -76,6 +92,11 @@ class Game {
 
     /*----- setup -----*/
 
+    // audio loader
+
+    this.audioLoader = new AudioLoader();
+    this.audioInitialized = false;
+
     // renderer
 
     this.renderer = new WebGLRenderer({canvas: this.canvas});
@@ -99,23 +120,26 @@ class Game {
     this.controls = new PointerLockControls( this.camera, document.body );
     this.playerController = new PlayerController();
 
-    // player
+    // create player
 
-    // this.player = new Player({
-    //   scene: this.scene,
-    //   renderer: this.renderer,
-    //   controller: this.playerController,
-    //   x: 0,
-    //   z: 0
-    // });
-
-    this.player = new PlayerCar({
-      scene: this.scene,
-      renderer: this.renderer,
-      controller: this.playerController,
-      x: -12,
-      z: 0
-    });
+    if (this.settings.mode=='car') {
+      this.player = new PlayerCar({
+        scene: this.scene,
+        renderer: this.renderer,
+        controller: this.playerController,
+        x: -12,
+        z: 0
+      });
+    }
+    else {
+      this.player = new Player({
+        scene: this.scene,
+        renderer: this.renderer,
+        controller: this.playerController,
+        x: 0,
+        z: 0
+      });
+    }
 
     /*----- post processing -----*/
 
@@ -229,6 +253,80 @@ class Game {
 
   }
 
+  initAudio() {
+
+    const self = this;
+
+    if (!this.audioInitialized) {
+
+      const audioListener = new AudioListener();
+      this.player.camera.add( audioListener );
+
+      // music
+      if ( this.settings.music == 1 ) {
+        const soundMusic = new Audio( audioListener );
+        this.audioLoader.load( 'assets/sounds/music.wav', function( buffer ) {
+          soundMusic.setBuffer( buffer );
+          soundMusic.setLoop(true);
+          soundMusic.setVolume(1);
+          soundMusic.play();
+        });
+      }
+      // sound effects
+      if ( this.settings.soundFx == 1 ) {
+        // traffic ambient
+        const soundTrafficAmbient = new Audio( audioListener );
+        this.audioLoader.load( 'assets/sounds/traffic_ambient.wav', function( buffer ) {
+          soundTrafficAmbient.setBuffer( buffer );
+          soundTrafficAmbient.setLoop(true);
+          soundTrafficAmbient.setVolume(1);
+          soundTrafficAmbient.play();
+        });
+        // car sounds
+        if ( this.settings.mode == 'car' ) {
+          const soundCarAmbient = new Audio( audioListener );
+          this.audioLoader.load( 'assets/sounds/car_ambient.wav', function( buffer ) {
+            soundCarAmbient.setBuffer( buffer );
+            soundCarAmbient.setLoop(true);
+            soundCarAmbient.setVolume(1);
+            soundCarAmbient.play();
+          });
+          const soundCarWind = new Audio( audioListener );
+          this.audioLoader.load( 'assets/sounds/car_wind.wav', function( buffer ) {
+            soundCarWind.setBuffer( buffer );
+            soundCarWind.setLoop(true);
+            soundCarWind.setVolume(0);
+            soundCarWind.play();
+            self.player.soundWind = soundCarWind;
+          });
+        }
+        // city sounds
+        else {
+          const soundCityAmbient = new Audio( audioListener );
+          this.audioLoader.load( 'assets/sounds/city_ambient.wav', function( buffer ) {
+            soundCityAmbient.setBuffer( buffer );
+            soundCityAmbient.setLoop(true);
+            soundCityAmbient.setVolume(0);
+            soundCityAmbient.play();
+            self.player.soundCityAmbient = soundCityAmbient;
+          });
+          const soundWind = new Audio( audioListener );
+          this.audioLoader.load( 'assets/sounds/car_wind.wav', function( buffer ) {
+            soundWind.setBuffer( buffer );
+            soundWind.setLoop(true);
+            soundWind.setVolume(0);
+            soundWind.play();
+            self.player.soundWind = soundWind;
+          });
+        }
+      }
+
+      this.audioInitialized = true;
+
+    }
+
+  }
+
   animate(now) {
 
     // animate
@@ -304,11 +402,14 @@ class Game {
   }
   onControlsLock() {
     this.playerController.enabled = true;
-    this.blocker.style.display = 'none';
+    // this.blocker.style.display = 'none';
+    this.blocker.classList.add('hide');
+    this.initAudio();
   }
   onControlsUnlock() {
     this.playerController.enabled = false;
-    this.blocker.style.display = 'block';
+    // this.blocker.style.display = 'block';
+    this.blocker.classList.remove('hide');
   }
 
 }
