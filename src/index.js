@@ -63,9 +63,11 @@ class Game {
     this.pixelRatioFactor = 1.5;
 
     // 9746
+    // 6362
     // 4217
     // 5794
     this.seed = Math.round(Math.random()*10000);
+    console.log('Game: Seed: '+this.seed);
 
     // elements
 
@@ -298,6 +300,14 @@ class Game {
             soundCarWind.setVolume(0);
             soundCarWind.play();
             self.player.soundWind = soundCarWind;
+          });
+          const soundCarStress = new Audio( audioListener );
+          this.audioLoader.load( 'assets/sounds/car_stress.wav', function( buffer ) {
+            soundCarStress.setBuffer( buffer );
+            soundCarStress.setLoop(true);
+            soundCarStress.setVolume(0);
+            soundCarStress.play();
+            self.player.soundStress = soundCarStress;
           });
         }
         // city sounds
