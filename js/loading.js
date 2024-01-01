@@ -13,20 +13,22 @@ var colorClass = 'c1';
 // onload
 window.onload = function() {
 
-  let speed = 120;
+  let speed = 100;
 
   setTimeout(function(){
-    // window.write('▉▉▉▉▉▉▉▉▉▉▉▉▉▉ synthcity ▉▉▉▉▉▉▉▉▉▉▉▉▉▉', 0, 500, function() {
     window.write('▉▉▉▉▉▉▉▉▉▉▉ welcome to synthcity ▉▉▉▉▉▉▉▉▉▉▉', 0, 500, function() {
-      window.newLine();
       window.newLine();
       if (isMobile()) {
         window.setColor('c2');
         window.write('>> ERROR: Device not supported', 0, 0, null);
       }
       else {
-        window.write(' ', speed, 50, function() {
+        window.setColor('c2');
+        window.newLine();
+        window.write('# a procedural audiovisual experience by jeff beene', 50, 2000, function() {
           window.setColor('c3');
+          window.newLine();
+          window.newLine();
           window.write('>> establishing connection', 0, 500, function() {
             window.write('.', speed, 500, function() {
               window.write('.', speed, 500, function() {
@@ -42,59 +44,53 @@ window.onload = function() {
                       window.newLine();
                       window.write(' ', speed, 500, function() {
                         window.setColor('c1');
-                        window.write('--info', speed, 50, function() {
+                        window.write('--system', speed, 50, function() {
                           window.setColor('c2');
                           window.newLine();
                           window.write(' ', speed, 500, function() {
                             window.newLine();
-                            window.write('# an infinite procedural experience by jeff beene', 0, 50, function() {
+                            window.setColor('c4');
+                            window.write('build version: '+version, 0, 250, function() {
                               window.newLine();
-                              window.newLine();
-                              window.setColor('c4');
-                              window.write('build version: '+version, 0, 250, function() {
+                              window.write('system manufacturer: jeff beene [www.jeff-beene.com]', 0, 50, function() {
                                 window.newLine();
-                                window.write('system manufacturer: jeff beene [www.jeff-beene.com]', 0, 50, function() {
+                                window.write('system boot time: '+bootDate, 0, 50, function() {
                                   window.newLine();
-                                  window.write('system boot time: '+bootDate, 0, 50, function() {
+                                  window.write('os name: three.js', 0, 50, function() {
                                     window.newLine();
-                                    window.write('os name: three.js', 0, 50, function() {
+                                    window.write('os version: '+threeVersion, 0, 50, function() {
                                       window.newLine();
-                                      window.write('os version: '+threeVersion, 0, 50, function() {
+                                      window.write('audio driver: uppbeat.io', 0, 50, function() {
                                         window.newLine();
-                                        window.write('audio driver: uppbeat.io', 0, 50, function() {
+                                        window.newLine();
+                                        window.setColor('c1');
+                                        window.write('--instructions', speed, 50, function() {
+                                          window.setColor('c2');
                                           window.newLine();
-                                          window.newLine();
-                                          window.setColor('c1');
-                                          window.write('--help', speed, 50, function() {
-                                            window.setColor('c2');
+                                          window.write(' ', speed, 500, function() {
                                             window.newLine();
-                                            window.write(' ', speed, 500, function() {
+                                            window.write('# sit back and enjoy the ride or take the wheel and drive', 0, 50, function() {
+                                              window.setColor('c4');
                                               window.newLine();
-                                              window.write('# sit back and enjoy the ride, or take the wheel and drive', 0, 50, function() {
-                                                window.setColor('c4');
+                                              window.newLine();
+                                              window.write('press <space> to toggle autopilot', 0, 50, function() {
                                                 window.newLine();
-                                                window.newLine();
-                                                window.write('press <space> to toggle autopilot', 0, 50, function() {
+                                                window.write('hold <shift> for overdrive', 0, 50, function() {
                                                   window.newLine();
-                                                  window.write('hold <shift> for overdrive', 0, 50, function() {
+                                                  window.write('press <]> to skip song', 0, 50, function() {
                                                     window.newLine();
-                                                    window.write('press <]> to skip song', 0, 50, function() {
+                                                    window.write('press <p> to pause song', 0, 50, function() {
                                                       window.newLine();
-                                                      window.write('press <p> to pause song', 0, 50, function() {
+                                                      window.write('press <esc> to open terminal', 0, 50, function() {
                                                         window.newLine();
-                                                        window.write('press <esc> to open terminal', 0, 50, function() {
-                                                          window.newLine();
-                                                          window.newLine();
-                                                          window.write(' ', speed, 500, function() {
+                                                        window.newLine();
+                                                        window.write(' ', speed, 500, function() {
+                                                          window.setColor('c3');
+                                                          window.write('>> Synthesizing...', 0, 1, function() {
                                                             window.setColor('c1');
-                                                            // window.write('>> press [enter] to initiate boot sequence', 0, 1, function() {
-                                                            window.write('--synthesize', speed, 1, function() {
-                                                              window.setColor('c1');
-                                                              // introComplete = true;
-                                                              window.newLine();
-                                                              window.newLine();
-                                                              window.game.load();
-                                                            });
+                                                            window.newLine();
+                                                            window.newLine();
+                                                            window.game.load();
                                                           });
                                                         });
                                                       });

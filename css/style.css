@@ -51,8 +51,9 @@ body {
   height: 100lvh;
   position: absolute;
   display: flex;
-  justify-content: center;
-  /* align-items: center; */
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
   background-color: #000000a8;
   background-image: url('../img/scanline.png');
   background-repeat: repeat;
@@ -75,6 +76,21 @@ body {
 	-webkit-animation: flicker 0.1s infinite, steady 4s;
   animation: flicker 0.1s infinite, steady 4s;
 
+}
+
+#enterBtn {
+  cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 550px;
+  border: none;
+  background: var(--terminalsecondary);
+  padding: 0.8rem;
+  color: black;
+  box-shadow: 0 0 15px 0px var(--terminalsecondary);
+  margin-top: 1.5rem;
+  border-radius: 2px;
 }
 
 @-webkit-keyframes flicker {

@@ -74,6 +74,7 @@ class Game {
     // elements
 
     this.blocker = document.getElementById( 'blocker' );
+    this.enterBtn = document.getElementById( 'enterBtn' );
     this.canvas = document.getElementById('canvas');
 
   }
@@ -257,7 +258,7 @@ class Game {
 
     window.addEventListener( 'resize', () => this.onWindowResize(), false );
 
-    this.blocker.addEventListener( 'click', () => this.onBlockerClick(), false );
+    this.enterBtn.addEventListener( 'click', () => this.onBlockerClick(), false );
     this.controls.addEventListener( 'lock', () => this.onControlsLock(), false );
     this.controls.addEventListener( 'unlock', () => this.onControlsUnlock(), false );
 
