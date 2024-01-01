@@ -49,10 +49,14 @@ class AssetManager {
 
     this.loadingManager = new LoadingManager();
     this.loadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-      // console.log( 'AssetManager: ' + itemsLoaded + ' of ' + itemsTotal + ' files loaded' );
+      window.writeAsset(url, itemsLoaded, itemsTotal);
     };
     this.loadingManager.onLoad = function () {
       console.log( 'AssetManager: Assets loaded' );
+      window.newLine();
+      window.newLine();
+      window.setColor('c3');
+      window.write('>> click anywhere to close terminal', 0, 50, null);
       window.game.onLoad();
     };
     this.loadingManager.onError = function ( url ) {

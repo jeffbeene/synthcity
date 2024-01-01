@@ -3,23 +3,31 @@
 
   <head>
 
-    <meta charset="utf-8" />
-    <title>Cyberpunk</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SynthCity</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> -->
 
   </head>
 
   <body>
 
     <div id="blocker">
-      <div id="instructions">
-        Cyberpunk City
+      <div id="terminal">
+        <span id="cursor">&#9619;</span>
       </div>
     </div>
 
     <canvas id="canvas"></canvas>
     
+    <script src="js/loading.js"></script>
     <script src="js/alea.js"></script>
 		<script src="js/proc-noise.js"></script>
     <script src="dist/main.js" async></script>

@@ -29,6 +29,8 @@ import { Player } from './classes/Player.js';
 import { PlayerCar } from './classes/PlayerCar.js';
 import { PlayerController } from './classes/PlayerController.js';
 
+import { Radio } from './classes/Radio.js';
+
 import { Generator } from './classes/Generator.js';
 import { GeneratorItem_CityBlock } from './classes/GeneratorItem_CityBlock.js';
 import { GeneratorItem_CityLight } from './classes/GeneratorItem_CityLight.js';
@@ -74,7 +76,9 @@ class Game {
     this.blocker = document.getElementById( 'blocker' );
     this.canvas = document.getElementById('canvas');
 
-    // load
+  }
+
+  load() {
 
     this.assets = new AssetManager();
     this.assets.setPath('assets/');
@@ -142,6 +146,10 @@ class Game {
         z: 0
       });
     }
+
+    // radio
+
+    this.radio = null;
 
     /*----- post processing -----*/
 
@@ -266,12 +274,9 @@ class Game {
 
       // music
       if ( this.settings.music == 1 ) {
-        const soundMusic = new Audio( audioListener );
-        this.audioLoader.load( 'assets/sounds/music.wav', function( buffer ) {
-          soundMusic.setBuffer( buffer );
-          soundMusic.setLoop(true);
-          soundMusic.setVolume(1);
-          soundMusic.play();
+        this.radio = new Radio({
+          audioListener: audioListener,
+          controller: this.playerController
         });
       }
       // sound effects
@@ -348,6 +353,7 @@ class Game {
     // update
 
     this.player.update();
+    if (this.radio) this.radio.update();
     this.playerController.update();
 
     this.generatorCityBlock.update();

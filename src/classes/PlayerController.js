@@ -21,6 +21,9 @@ class PlayerController {
     this.key_r = false;
 		this.key_pressed_f = false;
 		this.key_pressed_r = false;
+    this.key_pressed_right_bracket = false;
+		this.key_pressed_left_bracket = false;
+    this.key_pressed_p = false;
     this.key_pressed_space = false;
 		this.key_pressed_1 = false;
 		this.key_pressed_2 = false;
@@ -48,6 +51,9 @@ class PlayerController {
 		this.mouse_move_y = 0;
 		this.key_pressed_f = false;
 		this.key_pressed_r = false;
+    this.key_pressed_right_bracket = false;
+		this.key_pressed_left_bracket = false;
+    this.key_pressed_p = false;
     this.key_pressed_space = false;
 		this.key_pressed_1 = false;
 		this.key_pressed_2 = false;
@@ -97,6 +103,15 @@ class PlayerController {
 		      break;
 				case 16: //shift
 		      this.key_shift = true;
+		      break;
+        case 219: //left bracket
+		      this.key_pressed_left_bracket = true;
+		      break;
+        case 221: //right bracket
+		      this.key_pressed_right_bracket = true;
+		      break;
+        case 80: //p
+		      this.key_pressed_p = true;
 		      break;
         case 32: //space
 		      this.key_pressed_space = true;

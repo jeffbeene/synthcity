@@ -24,7 +24,7 @@ class PlayerCar {
 		this.look_roll_factor = -0.065;
 		this.max_look_speed = 200;
 
-		this.move_accel = 0.01;//0.01;
+		this.move_accel = 0.02;//0.01;
 
 		this.walk_speed = 1;//0.01;
 		this.run_speed = 3;//0.2;
@@ -174,12 +174,7 @@ class PlayerCar {
     // light
     this.light.position.set(this.car.position.x, this.car.position.y, this.car.position.z);
 
-    // disable car
-    // this.car.position.set(0,0,0);
-    // this.car_windows.position.set(0,0,0);
-    // this.light.position.set(0,0,0);
-
-    /*--- UPDATE POSITION ---*/
+    /*--- UPDATE CAR POSITION ---*/
 
     let accel = this.controller.key_shift ? this.move_accel*2 : this.move_accel;
 
@@ -193,8 +188,7 @@ class PlayerCar {
 		if (this.move_max_speed_current < this.move_max_speed) this.move_max_speed_current = this.move_max_speed;
 		if (this.move_max_speed_current >= this.move_max_speed) this.move_max_speed_current -= this.move_accel*2;
 
-    // momentum
-		// this.velocity.clampLength(0, this.move_max_speed_current * ( 1 + (-this.car_pitch / Math.PI ) * 2 ) );
+    // enforce max speed
     this.velocity.clampLength(0, this.move_max_speed_current);
 
     // update body position (no collision)

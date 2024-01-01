@@ -1,80 +1,67 @@
 :root {
-  --terminalbg: #1d1d69;
-  --terminalprimary: #00ffff;
-  --terminalsecondary: #ff00ff;
-  --terminaltertiary: #ffee00;
-  --terminalgray: #c9c9c9;
+  --terminalprimary: #ff00ff;
+  --terminalprimarytrans: #ff00ff5b;
+  --terminalsecondary: #00ffff;
+  --terminalsecondarytrans: #00ffff5b;
 }
 
 body {
 
-	margin: 0px;
-	background-color: var(--terminalbg);
-	overflow: hidden;
-
+  overflow: hidden;
   font-family: 'Share Tech Mono', monospace;
   font-size: 1rem;
+  text-transform: uppercase;
 
+  background-color: #070725;
+  /* background-image: url('../img/terminal_bg.jpg');
+  background-size: cover;
+  background-position: center; */
   color: var(--terminalprimary);
-  text-shadow: 0 0 5px var(--terminalprimary), 0 0 25px var(--terminalprimary);
+  text-shadow: 0 0 4px var(--terminalprimary);
+  
+  -webkit-animation: flicker 0.1s infinite, steady 4s;
+  animation: flicker 0.1s infinite, steady 4s;
 
 }
 
-.c1 {
-  color: var(--terminalprimary);
-  text-shadow: 0 0 5px var(--terminalprimary), 0 0 25px var(--terminalprimary);
-}
-.c2 {
-  color: var(--terminalsecondary);
-  text-shadow: 0 0 5px var(--terminalsecondary), 0 0 25px var(--terminalsecondary);
-}
-.c3 {
-  color: var(--terminaltertiary);
-  text-shadow: 0 0 5px var(--terminaltertiary), 0 0 25px var(--terminaltertiary);
-}
-.c4 {
-  color: var(--terminalgray);
-  text-shadow: 0 0 5px var(--terminalgray), 0 0 25px var(--terminalgray);
-}
 #cursor {
   color: #fff;
-  text-shadow: 0 0 5px #fff, 0 0 25px #fff;
+  text-shadow: 0 0 4px #fff;
 }
 
-/* canvas {
-  image-rendering: pixelated;
-} */
+.h {
+  color: var(--terminalsecondary);
+  text-shadow: 0 0 4px var(--terminalsecondary);
+}
 
-#blocker {
-	
+a, a:hover, pre {
+  color: var(--terminalprimary);
+}
+
+#fullscreenContainer {
   width: 100%;
   height: 100lvh;
-  position: absolute;
+  padding: 10rem;
   display: flex;
   justify-content: center;
   /* align-items: center; */
-  background-color: #000000a8;
-  background-image: url('../img/scanline.png');
-  background-repeat: repeat;
-  backdrop-filter: blur(10px);
-
-}
-#blocker.hide {
-  display: none;
 }
 
 #terminal {
-
-  text-transform: uppercase;
-  line-break: anywhere;
-
   width: 100%;
-  max-width: 550px;
-  margin-top: 20vh;
+  max-width: 500px;
+  margin-top: 10rem;
+}
 
-	-webkit-animation: flicker 0.1s infinite, steady 4s;
-  animation: flicker 0.1s infinite, steady 4s;
-
+.btn {
+  text-transform: uppercase;
+}
+.btn-primary {
+  color: var(--terminalprimary);
+  text-shadow: 0 0 4px var(--terminalprimary);
+  background-color: var(--terminalprimarytrans);
+  box-shadow: 0 0 4px var(--terminalprimarytrans);
+  border: none;
 }
 
 @-webkit-keyframes flicker {
@@ -87,7 +74,7 @@ body {
     transform: translateX(0);
   }
   10% {
-    opacity: .759;
+    opacity: .6759;
     transform: translateX(0);
   }
   15% {
@@ -103,11 +90,11 @@ body {
     transform: translateX(0);
   }
   30% {
-    opacity: .7811;
+    opacity: .57811;
     transform: translateX(0);
   }
   35% {
-    opacity: .6416;
+    opacity: .416;
     transform: translateX(0);
   }
   40% {
@@ -135,7 +122,7 @@ body {
     transform: translateX(0);
   }
   70% {
-    opacity: .7732;
+    opacity: .77;
     transform: translateX(0);
   }
   75% {
@@ -159,8 +146,8 @@ body {
     transform: translateX(0);
   }
   100% {
-    opacity: .6536;
-    transform: translateX(2px);
+    opacity: .5536;
+    transform: translateX(3px);
   }
 }
 
@@ -174,7 +161,7 @@ body {
     transform: translateX(0);
   }
   10% {
-    opacity: .759;
+    opacity: .6759;
     transform: translateX(0);
   }
   15% {
@@ -190,11 +177,11 @@ body {
     transform: translateX(0);
   }
   30% {
-    opacity: .7811;
+    opacity: .57811;
     transform: translateX(0);
   }
   35% {
-    opacity: .6416;
+    opacity: .416;
     transform: translateX(0);
   }
   40% {
@@ -222,7 +209,7 @@ body {
     transform: translateX(0);
   }
   70% {
-    opacity: .7732;
+    opacity: .77;
     transform: translateX(0);
   }
   75% {
@@ -246,7 +233,7 @@ body {
     transform: translateX(0);
   }
   100% {
-    opacity: .6536;
-    transform: translateX(2px);
+    opacity: .5536;
+    transform: translateX(3px);
   }
 }
