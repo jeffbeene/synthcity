@@ -79,9 +79,10 @@ window.onload = function() {
     }
     else if (val=='random') {
       $('#settingsWorldSeedValueContainer').hide();
-      window.userSettings.worldSeed = Math.random()*999999;
+      window.userSettings.worldSeed = Math.round(Math.random()*999999);
     }
     else if (val=='custom') {
+      $('#settingsWorldSeedValue').val(window.userSettings.worldSeed);
       $('#settingsWorldSeedValueContainer').show();
       window.userSettings.worldSeed = $('#settingsWorldSeedValue').val();
     }
@@ -251,7 +252,7 @@ window.showCredits = function() {
         });
       });
     });
-  }, 1500);
+  }, 2500);
 }
 
 // functions

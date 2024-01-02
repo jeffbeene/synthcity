@@ -176,8 +176,11 @@ body {
   color: #780a8f;
   box-shadow: 0 0 15px 0px var(--terminalsecondary);
   border-radius: 2px;
-  transition: opacity 1s;
+  transition: opacity 1s, box-shadow 0.2s;
   border-radius: 20px 0 20px 0;
+}
+#enterBtn:hover {
+  box-shadow: 0 0 30px 0px var(--terminalsecondary);
 }
 #enterBtn.show {
   opacity: 1;
@@ -224,7 +227,7 @@ input[type=number] {
   text-shadow: 0 0 5px var(--terminalprimary), 0 0 25px var(--terminalprimary);
   background: none;
   color: var(--terminalprimary);
-  width: 25%;
+  width: 33%;
 }
 
 /* scrollbar */

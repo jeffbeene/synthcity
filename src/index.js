@@ -368,12 +368,13 @@ class Game {
     this.clockDelta += delta;
 
     // fade in
+
     if (this.canvasOpacity<1) {
       // canvas
-      this.canvasOpacity += delta*0.1;
+      this.canvasOpacity += this.clockDelta*0.005;
       this.canvas.style.opacity = this.canvasOpacity;
       // audio
-      this.masterVolume += delta*0.1;
+      this.masterVolume += this.clockDelta*0.005;
       if (this.audioListener) {
         this.audioListener.setMasterVolume(this.masterVolume);
       }
