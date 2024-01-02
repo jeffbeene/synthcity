@@ -46,18 +46,16 @@ class Game {
 
     this.environment = this.getEnvironment('night');
 
-    // 9746
-    // 6362
-    // 4217
-    // 5794
-    this.seed = Math.round(Math.random()*10000);
-    console.log('Game: Seed: '+this.seed);
-
     // elements
 
     this.blocker = document.getElementById( 'blocker' );
     this.enterBtn = document.getElementById( 'enterBtn' );
     this.canvas = document.getElementById('canvas');
+
+    // fade in
+
+    this.canvasOpacity = 0;
+    this.masterVolume = 0;
 
     // launch button
 
@@ -99,21 +97,28 @@ class Game {
     // defaults
     this.settings = {
       mode: 'drive',
+      worldSeed: 9746,
       music: true,
       soundFx: true,
+      windshieldShader: 'simple',
       renderScaling: 1.0
     };
 
     if (window.userSettings.hasOwnProperty('mode')) this.settings.mode = window.userSettings.mode;
+    if (window.userSettings.hasOwnProperty('worldSeed')) this.settings.worldSeed = window.userSettings.worldSeed;
     if (window.userSettings.hasOwnProperty('music')) this.settings.music = window.userSettings.music;
     if (window.userSettings.hasOwnProperty('soundFx')) this.settings.soundFx = window.userSettings.soundFx;
     if (window.userSettings.hasOwnProperty('renderScaling')) this.settings.renderScaling = parseFloat(window.userSettings.renderScaling);
+    if (window.userSettings.hasOwnProperty('windshieldShader')) this.settings.windshieldShader = window.userSettings.windshieldShader;
+
+    console.log('Game: World seed: '+this.settings.worldSeed);
 
     /*----- setup -----*/
 
     // audio loader
 
     this.audioLoader = new AudioLoader();
+    this.audioListener = null;
     this.audioInitialized = false;
 
     // renderer
@@ -213,7 +218,7 @@ class Game {
     this.cityBlockSize = 128;
     this.roadWidth = 24;
 
-    this.cityBlockNoise = new Perlin(this.seed);
+    this.cityBlockNoise = new Perlin(this.settings.worldSeed);
     this.cityBlockNoise.noiseDetail(8, 0.5);
     this.cityBlockNoiseFactor = 0.0017;//0.0017;
 
@@ -281,20 +286,20 @@ class Game {
 
     if (!this.audioInitialized) {
 
-      const audioListener = new AudioListener();
-      this.player.camera.add( audioListener );
+      this.audioListener = new AudioListener();
+      this.player.camera.add( this.audioListener );
 
       // music
       if ( this.settings.music == 1 ) {
         this.radio = new Radio({
-          audioListener: audioListener,
+          audioListener: this.audioListener,
           controller: this.playerController
         });
       }
       // sound effects
       if ( this.settings.soundFx == 1 ) {
         // traffic ambient
-        const soundTrafficAmbient = new Audio( audioListener );
+        const soundTrafficAmbient = new Audio( this.audioListener );
         this.audioLoader.load( 'assets/sounds/traffic_ambient.wav', function( buffer ) {
           soundTrafficAmbient.setBuffer( buffer );
           soundTrafficAmbient.setLoop(true);
@@ -303,14 +308,14 @@ class Game {
         });
         // car sounds
         if ( this.settings.mode == 'drive' ) {
-          const soundCarAmbient = new Audio( audioListener );
+          const soundCarAmbient = new Audio( this.audioListener );
           this.audioLoader.load( 'assets/sounds/car_ambient.wav', function( buffer ) {
             soundCarAmbient.setBuffer( buffer );
             soundCarAmbient.setLoop(true);
             soundCarAmbient.setVolume(1);
             soundCarAmbient.play();
           });
-          const soundCarWind = new Audio( audioListener );
+          const soundCarWind = new Audio( this.audioListener );
           this.audioLoader.load( 'assets/sounds/car_wind.wav', function( buffer ) {
             soundCarWind.setBuffer( buffer );
             soundCarWind.setLoop(true);
@@ -318,7 +323,7 @@ class Game {
             soundCarWind.play();
             self.player.soundWind = soundCarWind;
           });
-          const soundCarStress = new Audio( audioListener );
+          const soundCarStress = new Audio( this.audioListener );
           this.audioLoader.load( 'assets/sounds/car_stress.wav', function( buffer ) {
             soundCarStress.setBuffer( buffer );
             soundCarStress.setLoop(true);
@@ -329,7 +334,7 @@ class Game {
         }
         // city sounds
         else {
-          const soundCityAmbient = new Audio( audioListener );
+          const soundCityAmbient = new Audio( this.audioListener );
           this.audioLoader.load( 'assets/sounds/city_ambient.wav', function( buffer ) {
             soundCityAmbient.setBuffer( buffer );
             soundCityAmbient.setLoop(true);
@@ -337,7 +342,7 @@ class Game {
             soundCityAmbient.play();
             self.player.soundCityAmbient = soundCityAmbient;
           });
-          const soundWind = new Audio( audioListener );
+          const soundWind = new Audio( this.audioListener );
           this.audioLoader.load( 'assets/sounds/car_wind.wav', function( buffer ) {
             soundWind.setBuffer( buffer );
             soundWind.setLoop(true);
@@ -361,6 +366,18 @@ class Game {
     requestAnimationFrame(() => this.animate());
     let delta = this.clock.getDelta(); // seconds
     this.clockDelta += delta;
+
+    // fade in
+    if (this.canvasOpacity<1) {
+      // canvas
+      this.canvasOpacity += delta*0.1;
+      this.canvas.style.opacity = this.canvasOpacity;
+      // audio
+      this.masterVolume += delta*0.1;
+      if (this.audioListener) {
+        this.audioListener.setMasterVolume(this.masterVolume);
+      }
+    }
 
     // update
 
@@ -431,7 +448,7 @@ class Game {
   }
   onControlsLock() {
     this.playerController.enabled = true;
-    // this.blocker.style.display = 'none';
+    this.blocker.style.backgroundColor = '#25004bb9';
     this.blocker.classList.add('hide');
     this.initAudio();
   }

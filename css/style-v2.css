@@ -1,5 +1,5 @@
 :root {
-  --terminalbg: #6700af;
+  --terminalbg: #26004b;
   --terminalprimary: #00fff7;
   --terminalprimarydark: #008581;
   --terminalsecondary: #ff00ff;
@@ -15,7 +15,7 @@
 body {
 
 	margin: 0px;
-	background-color: var(--terminalbg);
+	background-color: #000;
 	overflow: hidden;
 
   font-family: 'Share Tech Mono', monospace;
@@ -25,6 +25,10 @@ body {
   color: var(--terminalprimary);
   text-shadow: 0 0 5px var(--terminalprimary), 0 0 25px var(--terminalprimary);
 
+}
+
+::selection {
+  background: var(--terminalprimary);
 }
 
 .c1 {
@@ -75,12 +79,14 @@ body {
   height: 100lvh;
   padding: 4rem;
 
+  z-index: 999;
+
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background-color: #000000a8;
+  background-color: var(--terminalbg);
   background-image: url('../img/scanline.png');
   background-repeat: repeat;
   backdrop-filter: blur(10px);
@@ -161,6 +167,7 @@ body {
   opacity: 0;
   font-family: 'Share Tech Mono', monospace;
   font-size: 1.5rem;
+  font-weight: bold;
   text-transform: uppercase;
   width: 100%;
   border: none;
@@ -170,6 +177,7 @@ body {
   box-shadow: 0 0 15px 0px var(--terminalsecondary);
   border-radius: 2px;
   transition: opacity 1s;
+  border-radius: 20px 0 20px 0;
 }
 #enterBtn.show {
   opacity: 1;
@@ -206,6 +214,17 @@ body {
   content: "";
   position: absolute;
   display: none;
+}
+
+input[type=number] {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  border: 2px solid var(--terminalprimary);
+  box-shadow: 0 0 8px var(--terminalprimarydark), 0 0 8px var(--terminalprimarydark) inset;
+  text-shadow: 0 0 5px var(--terminalprimary), 0 0 25px var(--terminalprimary);
+  background: none;
+  color: var(--terminalprimary);
+  width: 25%;
 }
 
 /* scrollbar */

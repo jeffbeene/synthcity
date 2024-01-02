@@ -43,7 +43,8 @@ class PlayerCar {
     this.car = null;
     this.car_windows = null;
     this.car = new Mesh( window.game.assets.getModel('spinner'), [window.game.assets.getMaterial('spinner_interior'), window.game.assets.getMaterial('spinner_exterior')]);
-    this.car_windows = new Mesh(window.game.assets.getModel('spinner_windows'), window.game.assets.getMaterial('spinner_windows'));
+    const windowsMat = window.game.settings.windshieldShader == 'advanced' ? window.game.assets.getMaterial('spinner_windows_advanced') : window.game.assets.getMaterial('spinner_windows_simple')
+    this.car_windows = new Mesh(window.game.assets.getModel('spinner_windows'), windowsMat);
     if (this.car) this.scene.add(this.car);
     if (this.car_windows) this.scene.add(this.car_windows);
 

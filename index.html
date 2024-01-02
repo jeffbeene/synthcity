@@ -18,7 +18,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style-v2.css">
 
   </head>
 
@@ -27,7 +27,7 @@
     <div id="blocker">
       <div id="container">
         <div class="tCol leftCol">
-          <div class="tRow">
+          <div class="tRow" style="height:100%;">
             <div class="tHeader">&gt;Terminal</div>
             <div id="terminal">
               <span id="cursor">&#9619;</span>
@@ -36,11 +36,11 @@
         </div>
         <div class="tCol rightCol" style="width:calc(100% - 540px)">
           <div class="tRow" style="height:25%">
-            <div class="tHeader">Resources</div>
+            <div class="tHeader">#Resources</div>
             <div id="resources">&gt;&gt; No resources queued</div>
           </div>
           <div class="tRow" style="height:25%">
-            <div class="tHeader">Settings</div>
+            <div class="tHeader">#Settings</div>
             <div id="settings" style="display: none;">
               <div style="margin-bottom: 5px;">
                 *Refresh page to change settings after launch
@@ -58,6 +58,25 @@
                 </label>
               </div>
               <div style="margin-bottom: 5px;">
+                <span>World Seed:</span>
+                <label class="formCheckContainer">
+                  <input type="radio" checked="checked" name="settingsWorldSeed" value="curated">
+                  <span class="checkmark">[Curated]</span>
+                </label>
+                <label class="formCheckContainer">
+                  <input type="radio" name="settingsWorldSeed" value="random">
+                  <span class="checkmark">[Random]</span>
+                </label>
+                <label class="formCheckContainer">
+                  <input type="radio" name="settingsWorldSeed" value="custom">
+                  <span class="checkmark">[Custom]</span>
+                </label>
+              </div>
+              <div id="settingsWorldSeedValueContainer" style="display:none; margin-bottom: 5px;">
+                <span>Seed:</span>
+                <input type="number" id="settingsWorldSeedValue" name="settingsWorldSeedValue" value="0">
+              </div>
+              <div style="margin-bottom: 5px;">
                 <span>Render Scaling:</span>
                 <label class="formCheckContainer">
                   <input type="radio" checked="checked" name="settingsRenderScaling" value="1">
@@ -72,10 +91,21 @@
                   <span class="checkmark">[2.0x]</span>
                 </label>
               </div>
+              <div id="settingsWindshieldShaderContainer" style="margin-bottom: 5px;">
+                <span>Windshield FX:</span>
+                <label class="formCheckContainer">
+                  <input type="radio" checked="checked" name="settingsWindshieldShader" value="simple">
+                  <span class="checkmark">[Simple]</span>
+                </label>
+                <label class="formCheckContainer">
+                  <input type="radio" name="settingsWindshieldShader" value="advanced">
+                  <span class="checkmark">[Advanced]</span>
+                </label>
+              </div>
             </div>
           </div>
           <div class="tRow" style="height:25%">
-            <div class="tHeader">Controls</div>
+            <div class="tHeader">#Controls</div>
             <div id="controls">&gt;&gt; No program loaded</div>
             <!-- Fusce gravida egestas neque, id sodales arcu ultricies hendrerit. Maecenas quis justo gravida, semper nulla volutpat, pharetra mi. Sed ac ultricies dolor, dapibus euismod erat. Quisque in orci dolor. Suspendisse id laoreet eros, id volutpat purus. Nam hendrerit massa mauris, malesuada aliquam ipsum aliquam ut. Fusce turpis mauris, mollis ac purus vel, euismod luctus sem. Cras vitae dolor leo. Donec volutpat a arcu at consectetur. -->
           </div>
@@ -86,12 +116,12 @@
       </div>
     </div>
 
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" style="opacity:0;"></canvas>
     
-    <script src="js/loading.js"></script>
+    <script src="js/loading-v2.js"></script>
     <script src="js/alea.js"></script>
 		<script src="js/proc-noise.js"></script>
-    <script src="dist/main.js" async></script>
+    <script src="dist/main.8e268b1020b9ab9a0f8b.js" async></script>
 
   </body>
 </html>

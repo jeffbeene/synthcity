@@ -1,7 +1,14 @@
 // settings
 
-const version = '1.0.0';
+const version = '1.0.2';
 const threeVersion = '0.159.0';
+
+const curatedWorldSeeds = [
+  9746,
+  6362,
+  4217,
+  5794
+];
 
 const controlsText = {
   drive: [
@@ -26,9 +33,15 @@ const controlsText = {
 
 window.userSettings = {};
 
+window.userSettings = {
+  worldSeed: curatedWorldSeeds[Math.floor(Math.random()*curatedWorldSeeds.length)]
+};
+
 const terminal = document.getElementById("terminal");
 const resourcesTerminal = document.getElementById("resources");
 const controlsTerminal = document.getElementById("controls");
+
+let controlsInterval = null;
 
 const cursor = document.getElementById("cursor");
 var cursorVisible = true;
@@ -48,13 +61,44 @@ window.onload = function() {
     let val = $( 'input[name=settingsMode]:checked' ).val();
     window.userSettings.mode = val;
     // update controls
-    if (val=='drive') window.updateControls(controlsText.drive);
-    else if (val=='freeroam') window.updateControls(controlsText.freeroam);
+    if (val=='drive') {
+      window.updateControls(controlsText.drive);
+      $('#settingsWindshieldShaderContainer').show();
+    }
+    else if (val=='freeroam') {
+      window.updateControls(controlsText.freeroam);
+      $('#settingsWindshieldShaderContainer').hide();
+    }
+  });
+
+  $('input[name=settingsWorldSeed]').change(function(){
+    let val = $( 'input[name=settingsWorldSeed]:checked' ).val();
+    if (val=='curated') {
+      $('#settingsWorldSeedValueContainer').hide();
+      window.userSettings.worldSeed = curatedWorldSeeds[Math.floor(Math.random()*curatedWorldSeeds.length)];
+    }
+    else if (val=='random') {
+      $('#settingsWorldSeedValueContainer').hide();
+      window.userSettings.worldSeed = Math.random()*999999;
+    }
+    else if (val=='custom') {
+      $('#settingsWorldSeedValueContainer').show();
+      window.userSettings.worldSeed = $('#settingsWorldSeedValue').val();
+    }
+  });
+  $('#settingsWorldSeedValue').on('input', function() {
+    window.userSettings.worldSeed = $('#settingsWorldSeedValue').val();
+    console.log(window.userSettings.worldSeed);
   });
 
   $('input[name=settingsRenderScaling]').change(function(){
     let val = $( 'input[name=settingsRenderScaling]:checked' ).val();
     window.userSettings.renderScaling = val;
+  });
+
+  $('input[name=settingsWindshieldShader]').change(function(){
+    let val = $( 'input[name=settingsWindshieldShader]:checked' ).val();
+    window.userSettings.windshieldShader = val;
   });
 
   // terminal
@@ -88,42 +132,47 @@ window.onload = function() {
                 window.write('/____  >/ ____|___|  /__| |___|  /\\___  >__||__|  / ____|', 0, 0, function() {
                   window.newLine();
                   window.setColor('g5');
-                  window.write('     \\/ \/         \\/          \\/     \\/          \\/     ', 0, 0, function() {
+                  window.write('     \\/ \\/         \\/          \\/     \\/          \\/     ', 0, 0, function() {
                     window.newLine();
                     window.newLine();
                     window.setColor('g1');
-                    window.write('** an interactive audiovisual experience by jeff beene **', 0, 800, function() {
+                    window.write('   an interactive audiovisual experience by jeff beene', 0, 0, function() {
                       window.newLine();
                       window.newLine();
-                      window.setColor('c3');
-                      window.write('>> initiating boot sequence...', 0, 500, function() {
-
-                        // show settings
-                        settings.style.display = 'block';
-
-                        // write controls
-                        window.updateControls(controlsText.drive);
-
+                      // window.write('*********************************************************', 0, 800, function() {
+                      window.write('▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚▚', 0, 800, function() {
                         window.newLine();
                         window.newLine();
-                        window.setColor('c4');
-                        window.write('build version: '+version, 0, 50, function() {
+                        window.setColor('c3');
+                        window.write('>> initiating boot sequence...', 0, 500, function() {
+
+                          // show settings
+                          settings.style.display = 'block';
+
+                          // write controls
+                          window.updateControls(controlsText.drive);
+
                           window.newLine();
-                          window.write('system manufacturer: jeff beene [www.jeff-beene.com]', 0, 50, function() {
+                          window.newLine();
+                          window.setColor('c4');
+                          window.write('build version: '+version, 0, 50, function() {
                             window.newLine();
-                            window.write('system boot time: '+bootDate, 0, 50, function() {
+                            window.write('system manufacturer: jeff beene [www.jeff-beene.com]', 0, 50, function() {
                               window.newLine();
-                              window.write('os name: three.js', 0, 50, function() {
+                              window.write('system boot time: '+bootDate, 0, 50, function() {
                                 window.newLine();
-                                window.write('os version: '+threeVersion, 0, 50, function() {
+                                window.write('os name: three.js', 0, 50, function() {
                                   window.newLine();
-                                  window.write('audio driver: uppbeat.io', 0, 50, function() {
+                                  window.write('os version: '+threeVersion, 0, 50, function() {
                                     window.newLine();
-                                    window.newLine();
-                                    window.setColor('c3');
-                                    window.write('>> loading resources...', 0, 50, function() {
-                                      // load
-                                      window.game.load();
+                                    window.write('audio driver: uppbeat.io', 0, 50, function() {
+                                      window.newLine();
+                                      window.newLine();
+                                      window.setColor('c3');
+                                      window.write('>> loading resources...', 0, 50, function() {
+                                        // load
+                                        window.game.load();
+                                      });
                                     });
                                   });
                                 });
@@ -146,22 +195,63 @@ window.onload = function() {
 }
 
 window.showCredits = function() {
-  /*
   setTimeout(function(){
     window.newLine();
     window.newLine();
     window.setColor('c1');
-    window.write('synthcity --credits', 80, 500, function() {
+    window.write('synthcity --credits', 80, 800, function() {
       window.newLine();
       window.newLine();
       window.setColor('c4');
-      window.write('huge thank you to the three.js community!', 0, 500, function() {
+      window.write('<3d graphics library> three.js [threejs.org]', 0, 50, function() {
         window.newLine();
-        window.setColor('c4');
+        window.write('<bladerunner car> quaz30 [sketchfab.com/quaz30]', 0, 50, function() {
+          window.newLine();
+          window.write('<sound fx> freesound [freesound.org]', 0, 50, function() {
+            window.newLine();
+            window.newLine();
+            window.write('# Music from #Uppbeat (free for Creators!)', 0, 50, function() {
+              window.newLine();
+              window.newLine();
+              window.write('<prigida> [uppbeat.io/browse/artist/prigida]', 0, 50, function() {
+                window.newLine();
+                window.write('<pecan-pie> [uppbeat.io/browse/artist/pecan-pie]', 0, 50, function() {
+                  window.newLine();
+                  window.write('<mountaineer> [uppbeat.io/browse/artist/mountaineer]', 0, 50, function() {
+                    window.newLine();
+                    window.write('<d0d> [uppbeat.io/browse/artist/d0d]', 0, 50, function() {
+                      window.newLine();
+                      window.write('<fass> [uppbeat.io/browse/artist/fass]', 0, 50, function() {
+                        window.newLine();
+                        window.write('<tatami> [uppbeat.io/browse/artist/tatami]', 0, 50, function() {
+                          window.newLine();
+                          window.write('<kaleidoscope> [uppbeat.io/browse/artist/kaleidoscope]', 0, 50, function() {
+                            window.newLine();
+                            window.write('<noise-cake> [uppbeat.io/browse/artist/noise-cake]', 0, 50, function() {
+                              window.newLine();
+                              window.write('<mood-maze> [uppbeat.io/browse/artist/mood-maze]', 0, 50, function() {
+                                window.newLine();
+                                window.write('<bosnow> [uppbeat.io/browse/artist/bosnow]', 0, 50, function() {
+                                  window.newLine();
+                                  window.write('<tecnosine> [uppbeat.io/browse/artist/tecnosine]', 0, 50, function() {
+                                    window.newLine();
+                                  });
+                                });
+                              });
+                            });
+                          });
+                        });
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
       });
     });
-  }, 800);
-  */
+  }, 1500);
 }
 
 // functions
@@ -201,10 +291,13 @@ window.write = function(s, speed, delay, callback) {
 window.newLine = function(el=terminal) {
   const node = document.createElement('br');
   terminal.insertBefore(node, cursor);
+  // scroll to bottom
+  terminal.scrollTop = terminal.scrollHeight;
 }
 
 window.updateControls = function(arr) {
   controlsTerminal.innerHTML = '';
+  clearInterval(controlsInterval);
   window.writeControls(arr[0], function(){
     window.writeControls(arr[1], function(){
       window.writeControls(arr[2], function(){
@@ -222,7 +315,7 @@ window.writeControls = function(s, callback) {
   let i = 0;
   const linebreak = document.createElement('br');
   controlsTerminal.insertBefore(linebreak, controlsTerminal.lastChild);
-  let interval = setInterval(function(){
+  controlsInterval = setInterval(function(){
     const newNode = document.createElement('span');
     newNode.className = 'c1';
     let textNode = document.createTextNode(s.charAt(i));
@@ -230,7 +323,7 @@ window.writeControls = function(s, callback) {
     controlsTerminal.insertBefore(newNode, controlsTerminal.lastChild);
     i++;
     if(i==s.length){
-      clearInterval(interval);
+      clearInterval(controlsInterval);
       if (callback) callback();
     }
   }, 0);
