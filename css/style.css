@@ -1,9 +1,15 @@
 :root {
-  --terminalbg: #1d1d69;
-  --terminalprimary: #00ffff;
+  --terminalbg: #6700af;
+  --terminalprimary: #00fff7;
+  --terminalprimarydark: #008581;
   --terminalsecondary: #ff00ff;
-  --terminaltertiary: #ffee00;
-  --terminalgray: #c9c9c9;
+  --terminalsecondarydark: #830083;
+  --terminaltertiary: #00ff95;
+  --terminallight: #f3e3ff;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -14,6 +20,7 @@ body {
 
   font-family: 'Share Tech Mono', monospace;
   font-size: 1rem;
+  text-transform: uppercase;
 
   color: var(--terminalprimary);
   text-shadow: 0 0 5px var(--terminalprimary), 0 0 25px var(--terminalprimary);
@@ -33,27 +40,46 @@ body {
   text-shadow: 0 0 5px var(--terminaltertiary), 0 0 25px var(--terminaltertiary);
 }
 .c4 {
-  color: var(--terminalgray);
-  text-shadow: 0 0 5px var(--terminalgray), 0 0 25px var(--terminalgray);
+  color: var(--terminallight);
+  text-shadow: 0 0 5px var(--terminallight), 0 0 25px var(--terminallight);
 }
 #cursor {
-  color: #fff;
-  text-shadow: 0 0 5px #fff, 0 0 25px #fff;
+  color: var(--terminallight);
+  text-shadow: 0 0 5px var(--terminallight), 0 0 25px var(--terminallight);
 }
 
-/* canvas {
-  image-rendering: pixelated;
-} */
+.g1 {
+  color: #fe435f;
+  text-shadow: 0 0 5px #fe435f, 0 0 25px #fe435f;
+}
+.g2 {
+  color: #fd308e;
+  text-shadow: 0 0 5px #fd308e, 0 0 25px #fd308e;
+}
+.g3 {
+  color: #e531b5;
+  text-shadow: 0 0 5px #e531b5, 0 0 25px #e531b5;
+}
+.g4 {
+  color: #a936db;
+  text-shadow: 0 0 5px #a936db, 0 0 25px #a936db;
+}
+.g5 {
+  color: #653bf7;
+  text-shadow: 0 0 5px #653bf7, 0 0 25px #653bf7;
+}
 
 #blocker {
 	
   width: 100%;
   height: 100lvh;
+  padding: 4rem;
+
   position: absolute;
   display: flex;
-  flex-direction: column;
-  /* justify-content: center; */
+  justify-content: center;
   align-items: center;
+
   background-color: #000000a8;
   background-image: url('../img/scanline.png');
   background-repeat: repeat;
@@ -64,34 +90,170 @@ body {
   display: none;
 }
 
-#terminal {
-
-  text-transform: uppercase;
-  line-break: anywhere;
-
+#container {
   width: 100%;
-  max-width: 550px;
-  margin-top: 20vh;
+  height: 100%;
+  max-width: 1000px;
+  max-height: 640px;
+  border: 1px solid var(--terminalprimary);
+  border-radius: 2px;
+  display: flex;
+  -webkit-animation: flicker 0.1s infinite, startup 0.3s;
+  animation: flicker 0.1s infinite, startup 0.3s;
+  -webkit-animation-timing-function: steps(5, end);
+  animation-timing-function: steps(5, end);
+}
 
-	-webkit-animation: flicker 0.1s infinite, steady 4s;
-  animation: flicker 0.1s infinite, steady 4s;
+#terminal, #resources, #settings, #controls {
+  height: calc(100% - 23px);
+  overflow-y: scroll;
+  padding: 5px;
+}
+#terminal {
+  line-break: anywhere;
+}
+#resources {
+  font-size: 0.8rem;
+  overflow-x: hidden;
+  text-wrap:nowrap;
+}
+#settings {
+  padding: 5px;
+}
 
+.tCol {
+  display: flex;
+  flex-direction: column;
+}
+.tRow {
+  border: 1px solid var(--terminalprimary);
+  box-shadow: 0 0 8px var(--terminalprimarydark), 0 0 8px var(--terminalprimarydark) inset;
+  flex-grow: 1;
+  padding: 5px;
+}
+.tHeader {
+  background: var(--terminalprimary);
+  box-shadow: 0 0 10px var(--terminalprimary);
+  text-shadow: none;
+  color: var(--terminalprimarydark);
+  padding: 5px;
+  width: 100%;
+}
+
+.leftCol {
+  width:540px;
+}
+
+@media only screen and (max-width: 850px) {
+  #blocker {
+    padding: 1rem;
+  }
+  .leftCol {
+    width:100%;
+  }
+  .rightCol {
+    display: none !important;
+  }
 }
 
 #enterBtn {
-  cursor: pointer;
+  pointer-events: none;
+  opacity: 0;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 1rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
   width: 100%;
-  max-width: 550px;
   border: none;
   background: var(--terminalsecondary);
   padding: 0.8rem;
-  color: black;
+  color: #780a8f;
   box-shadow: 0 0 15px 0px var(--terminalsecondary);
-  margin-top: 1.5rem;
   border-radius: 2px;
+  transition: opacity 1s;
 }
+#enterBtn.show {
+  opacity: 1;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+/* settings form */
+
+.formCheckContainer {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.formCheckContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+.checkmark {
+  color: var(--terminalprimary);
+}
+.formCheckContainer input:checked ~ .checkmark {
+  background-color: var(--terminalprimary);
+  color: var(--terminalprimarydark);
+  box-shadow: 0 0 10px var(--terminalprimary);
+  text-shadow: none;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* scrollbar */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+  background: var(--terminalprimary); 
+  box-shadow: 0 0 8px 0px var(--terminalprimarydark);
+}
+
+/* startup */
+
+@-webkit-keyframes startup {
+  0% {
+    transform: scaleX(8) scaleY(0.02) translateX(500px) translateY(500px);
+  }
+  25% {
+    transform: scaleX(4) scaleY(0.02) translateX(-200px) translateY(-200px);
+  }
+  75% {
+    transform: scaleX(2) scaleY(0.02) translateX(100px) translateY(100px);
+  }
+  100% {
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes startup {
+  0% {
+    transform: scaleX(8) scaleY(0.02) translateX(500px) translateY(500px);
+  }
+  25% {
+    transform: scaleX(4) scaleY(0.02) translateX(-200px) translateY(-200px);
+  }
+  75% {
+    transform: scaleX(2) scaleY(0.02) translateX(100px) translateY(100px);
+  }
+  100% {
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+/* flicker */
 
 @-webkit-keyframes flicker {
   0% {
@@ -99,11 +261,11 @@ body {
     transform: translateX(0);
   }
   5% {
-    opacity: .793;
+    opacity: .893;
     transform: translateX(0);
   }
   10% {
-    opacity: .759;
+    opacity: .859;
     transform: translateX(0);
   }
   15% {
@@ -111,7 +273,7 @@ body {
     transform: translateX(0);
   }
   20% {
-    opacity: .61364;
+    opacity: .81364;
     transform: translateX(0);
   }
   25% {
@@ -119,11 +281,11 @@ body {
     transform: translateX(0);
   }
   30% {
-    opacity: .7811;
+    opacity: .8811;
     transform: translateX(0);
   }
   35% {
-    opacity: .6416;
+    opacity: .8416;
     transform: translateX(0);
   }
   40% {
@@ -131,7 +293,7 @@ body {
     transform: translateX(0);
   }
   45% {
-    opacity: .62054;
+    opacity: .82054;
     transform: translateX(0);
   }
   50% {
@@ -143,7 +305,7 @@ body {
     transform: translateX(0);
   }
   60% {
-    opacity: .7872;
+    opacity: .8872;
     transform: translateX(0);
   }
   65% {
@@ -151,11 +313,11 @@ body {
     transform: translateX(0);
   }
   70% {
-    opacity: .7732;
+    opacity: .8732;
     transform: translateX(0);
   }
   75% {
-    opacity: .7512;
+    opacity: .8512;
     transform: translateX(1px);
   }
   80% {
@@ -167,7 +329,7 @@ body {
     transform: translateX(0);
   }
   90% {
-    opacity: .76553;
+    opacity: .86553;
     transform: translateX(0);
   }
   95% {
@@ -175,8 +337,8 @@ body {
     transform: translateX(0);
   }
   100% {
-    opacity: .6536;
-    transform: translateX(2px);
+    opacity: .8536;
+    transform: translateX(1px);
   }
 }
 
@@ -186,11 +348,11 @@ body {
     transform: translateX(0);
   }
   5% {
-    opacity: .793;
+    opacity: .893;
     transform: translateX(0);
   }
   10% {
-    opacity: .759;
+    opacity: .859;
     transform: translateX(0);
   }
   15% {
@@ -198,7 +360,7 @@ body {
     transform: translateX(0);
   }
   20% {
-    opacity: .61364;
+    opacity: .81364;
     transform: translateX(0);
   }
   25% {
@@ -206,11 +368,11 @@ body {
     transform: translateX(0);
   }
   30% {
-    opacity: .7811;
+    opacity: .8811;
     transform: translateX(0);
   }
   35% {
-    opacity: .6416;
+    opacity: .8416;
     transform: translateX(0);
   }
   40% {
@@ -218,7 +380,7 @@ body {
     transform: translateX(0);
   }
   45% {
-    opacity: .62054;
+    opacity: .82054;
     transform: translateX(0);
   }
   50% {
@@ -230,7 +392,7 @@ body {
     transform: translateX(0);
   }
   60% {
-    opacity: .7872;
+    opacity: .8872;
     transform: translateX(0);
   }
   65% {
@@ -238,11 +400,11 @@ body {
     transform: translateX(0);
   }
   70% {
-    opacity: .7732;
+    opacity: .8732;
     transform: translateX(0);
   }
   75% {
-    opacity: .7512;
+    opacity: .8512;
     transform: translateX(1px);
   }
   80% {
@@ -254,7 +416,7 @@ body {
     transform: translateX(0);
   }
   90% {
-    opacity: .76553;
+    opacity: .86553;
     transform: translateX(0);
   }
   95% {
@@ -262,7 +424,7 @@ body {
     transform: translateX(0);
   }
   100% {
-    opacity: .6536;
-    transform: translateX(2px);
+    opacity: .8536;
+    transform: translateX(1px);
   }
 }

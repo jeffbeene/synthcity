@@ -53,11 +53,6 @@ class AssetManager {
     };
     this.loadingManager.onLoad = function () {
       console.log( 'AssetManager: Assets loaded' );
-      window.newLine();
-      window.newLine();
-      document.getElementById('enterBtn').style.display = 'block';
-      // window.setColor('c3');
-      // window.write('>> click anywhere to close terminal', 0, 50, null);
       window.game.onLoad();
     };
     this.loadingManager.onError = function ( url ) {

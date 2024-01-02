@@ -42,27 +42,9 @@ class Game {
 
   constructor() {
 
-    // user settings
-
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-
-    this.settings = {
-      mode: 'car',
-      music: true,
-      soundFx: true
-    };
-
-    if (params.has('mode')) this.settings.mode = params.get('mode');
-    if (params.has('music')) this.settings.music = params.get('music');
-    if (params.has('soundFx')) this.settings.soundFx = params.get('soundFx');
-
-    //urlParams.get('soundFx')
-
-    // internal settings
+    this.initialized = false;
 
     this.environment = this.getEnvironment('night');
-    this.pixelRatioFactor = 1.5;
 
     // 9746
     // 6362
@@ -77,6 +59,10 @@ class Game {
     this.enterBtn = document.getElementById( 'enterBtn' );
     this.canvas = document.getElementById('canvas');
 
+    // launch button
+
+    this.enterBtn.addEventListener( 'click', () => this.onBlockerClick(), false );
+
   }
 
   load() {
@@ -89,13 +75,39 @@ class Game {
 
   onLoad() {
 
-    this.init();
+    // terminal
+    window.setColor('c2');
+    window.newLine();
+    window.newLine();
+    window.write('>> boot sequence complete', 0, 0, null);
+    window.showCredits();
+
+    // show launch button
+    document.getElementById('enterBtn').classList.add('show');
 
   }
 
   init() {
 
+    if (this.initialized) return;
+    this.initialized = true;
+
     console.log('Game: Initializing');
+
+    /*----- user settings -----*/
+
+    // defaults
+    this.settings = {
+      mode: 'drive',
+      music: true,
+      soundFx: true,
+      renderScaling: 1.0
+    };
+
+    if (window.userSettings.hasOwnProperty('mode')) this.settings.mode = window.userSettings.mode;
+    if (window.userSettings.hasOwnProperty('music')) this.settings.music = window.userSettings.music;
+    if (window.userSettings.hasOwnProperty('soundFx')) this.settings.soundFx = window.userSettings.soundFx;
+    if (window.userSettings.hasOwnProperty('renderScaling')) this.settings.renderScaling = parseFloat(window.userSettings.renderScaling);
 
     /*----- setup -----*/
 
@@ -107,7 +119,7 @@ class Game {
     // renderer
 
     this.renderer = new WebGLRenderer({canvas: this.canvas});
-    this.renderer.setPixelRatio( window.devicePixelRatio*this.pixelRatioFactor );
+    this.renderer.setPixelRatio( window.devicePixelRatio*this.settings.renderScaling );
     this.renderer.setSize( window.innerWidth, window.innerHeight );
     this.renderer.toneMapping = ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.0;
@@ -129,7 +141,7 @@ class Game {
 
     // create player
 
-    if (this.settings.mode=='car') {
+    if (this.settings.mode=='drive') {
       this.player = new PlayerCar({
         scene: this.scene,
         renderer: this.renderer,
@@ -258,7 +270,6 @@ class Game {
 
     window.addEventListener( 'resize', () => this.onWindowResize(), false );
 
-    this.enterBtn.addEventListener( 'click', () => this.onBlockerClick(), false );
     this.controls.addEventListener( 'lock', () => this.onControlsLock(), false );
     this.controls.addEventListener( 'unlock', () => this.onControlsUnlock(), false );
 
@@ -291,7 +302,7 @@ class Game {
           soundTrafficAmbient.play();
         });
         // car sounds
-        if ( this.settings.mode == 'car' ) {
+        if ( this.settings.mode == 'drive' ) {
           const soundCarAmbient = new Audio( audioListener );
           this.audioLoader.load( 'assets/sounds/car_ambient.wav', function( buffer ) {
             soundCarAmbient.setBuffer( buffer );
@@ -415,6 +426,7 @@ class Game {
   }
 
   onBlockerClick() {
+    this.init();
     this.controls.lock();
   }
   onControlsLock() {

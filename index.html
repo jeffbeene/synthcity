@@ -16,6 +16,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="css/style.css">
 
   </head>
@@ -23,10 +25,65 @@
   <body>
 
     <div id="blocker">
-      <div id="terminal">
-        <span id="cursor">&#9619;</span>
+      <div id="container">
+        <div class="tCol leftCol">
+          <div class="tRow">
+            <div class="tHeader">&gt;Terminal</div>
+            <div id="terminal">
+              <span id="cursor">&#9619;</span>
+            </div>
+          </div>
+        </div>
+        <div class="tCol rightCol" style="width:calc(100% - 540px)">
+          <div class="tRow" style="height:25%">
+            <div class="tHeader">Resources</div>
+            <div id="resources">&gt;&gt; No resources queued</div>
+          </div>
+          <div class="tRow" style="height:25%">
+            <div class="tHeader">Settings</div>
+            <div id="settings" style="display: none;">
+              <div style="margin-bottom: 5px;">
+                *Refresh page to change settings after launch
+                <br><br>
+              </div>
+              <div style="margin-bottom: 5px;">
+                <span>Mode:</span>
+                <label class="formCheckContainer">
+                  <input type="radio" checked="checked" name="settingsMode" value="drive">
+                  <span class="checkmark">[Drive]</span>
+                </label>
+                <label class="formCheckContainer">
+                  <input type="radio" name="settingsMode" value="freeroam">
+                  <span class="checkmark">[Freeroam]</span>
+                </label>
+              </div>
+              <div style="margin-bottom: 5px;">
+                <span>Render Scaling:</span>
+                <label class="formCheckContainer">
+                  <input type="radio" checked="checked" name="settingsRenderScaling" value="1">
+                  <span class="checkmark">[1.0x]</span>
+                </label>
+                <label class="formCheckContainer">
+                  <input type="radio" name="settingsRenderScaling" value="1.5">
+                  <span class="checkmark">[1.5x]</span>
+                </label>
+                <label class="formCheckContainer">
+                  <input type="radio" name="settingsRenderScaling" value="2">
+                  <span class="checkmark">[2.0x]</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="tRow" style="height:25%">
+            <div class="tHeader">Controls</div>
+            <div id="controls">&gt;&gt; No program loaded</div>
+            <!-- Fusce gravida egestas neque, id sodales arcu ultricies hendrerit. Maecenas quis justo gravida, semper nulla volutpat, pharetra mi. Sed ac ultricies dolor, dapibus euismod erat. Quisque in orci dolor. Suspendisse id laoreet eros, id volutpat purus. Nam hendrerit massa mauris, malesuada aliquam ipsum aliquam ut. Fusce turpis mauris, mollis ac purus vel, euismod luctus sem. Cras vitae dolor leo. Donec volutpat a arcu at consectetur. -->
+          </div>
+          <div class="tRow" style="height:32px;">
+            <button id="enterBtn">&gt;&gt;Launch&lt;&lt;</button>
+          </div>
+        </div>
       </div>
-      <button id="enterBtn" style="display:none;">[ ENTER ]</button>
     </div>
 
     <canvas id="canvas"></canvas>
