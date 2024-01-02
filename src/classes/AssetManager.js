@@ -90,7 +90,7 @@ class AssetManager {
       this.textures['spinner_windows_norm'].wrapS = RepeatWrapping;
       this.textures['spinner_windows_norm'].wrapT = RepeatWrapping;
       this.textures['spinner_windows_norm'].repeat.set( 2.5, 2.5 );
-    this.textures['spinner_windows_rough'] = this.textureLoader.load(this.path+'textures/smudges3_512.jpg');
+    this.textures['spinner_windows_rough'] = this.textureLoader.load(this.path+'textures/smudges2_1024.jpg');
       this.textures['spinner_windows_rough'].wrapS = RepeatWrapping;
       this.textures['spinner_windows_rough'].wrapT = RepeatWrapping;
       this.textures['spinner_windows_rough'].repeat.set( 2.5, 2.5 );
