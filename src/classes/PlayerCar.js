@@ -197,6 +197,15 @@ class PlayerCar {
     this.body.position.z += this.velocity.z;
     this.body.position.y += this.velocity.y;
 
+    // min max altitude
+
+    if (this.body.position.y<15) {
+      this.body.position.y = 15;
+    }
+    if (this.body.position.y>800) {
+      this.body.position.y = 800;
+    }
+
     /*--- UPDATE AUDIO ---*/
 
     if (this.soundWind) this.soundWind.setVolume( this.clamp( this.velocity.length() - this.walk_speed, 0, 1 ) );
