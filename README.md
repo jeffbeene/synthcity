@@ -1,6 +1,6 @@
 # SynthCity - An Infinite Procedural Cyberpunk City
 
-SynthCity is an interactive WebGL experience built with [Three.js](https://threejs.org/). Sit back and relax while autopilot takes you through the city, take the wheel and fly, or explore the endless world in “freeroam” mode - all while enjoying a curated synthwave playlist.
+SynthCity is an interactive WebGL experience built with [Three.js](https://threejs.org/). Sit back and relax while autopilot takes you for a ride, take the wheel and drive, or explore the endless world in freeroam mode - all while enjoying a curated synthwave playlist.
 
 ## Setup
 
