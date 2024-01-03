@@ -1,5 +1,5 @@
 {
-  "name": "cyberpunk",
+  "name": "synthcity",
   "version": "1.0.4",
   "description": "Infinite procedural city in three.js",
   "author": "Jeff Beene",
@@ -11,7 +11,7 @@
     "build": "webpack --mode production"
   },
   "dependencies": {
-    "three": "^0.159.0"
+    "three": "0.159.0"
   },
   "devDependencies": {
     "webpack": "^5.78.0",
