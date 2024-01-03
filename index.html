@@ -19,7 +19,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="css/style-v4.css">
+    <link rel="stylesheet" href="css/style-v5.css">
 
   </head>
 
@@ -43,9 +43,8 @@
           <div class="tRow" style="height:25%">
             <div class="tHeader">#Settings</div>
             <div id="settings" style="display: none;">
-              <div style="margin-bottom: 5px;">
-                *Refresh page to change settings after launch
-                <br><br>
+              <div id="settingsLockMessage" class="g1" style="display:none; margin-bottom:10px;">
+                *Settings locked, refresh page to unlock
               </div>
               <div style="margin-bottom: 5px;">
                 <span>Mode:</span>
@@ -119,10 +118,10 @@
 
     <canvas id="canvas" style="opacity:0;"></canvas>
     
-    <script src="js/loading-v4.js"></script>
+    <script src="js/ui.js"></script>
     <script src="js/alea.js"></script>
 		<script src="js/proc-noise.js"></script>
-    <script src="dist/main.7c94bd9cfc3e25562991.js" async></script>
+    <script src="dist/main.2f0a17bd4eb76a99a8ee.js" async></script>
 
   </body>
 </html>

@@ -128,6 +128,11 @@ body {
   padding: 5px;
 }
 
+#settings.locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .tCol {
   display: flex;
   flex-direction: column;

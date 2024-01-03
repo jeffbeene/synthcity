@@ -59,6 +59,13 @@ var colorClass = 'c1';
 
 window.onload = function() {
 
+  // enter button
+  const enterBtn = document.getElementById( 'enterBtn' );
+  enterBtn.addEventListener( 'click', function(){
+    $('#settings').addClass('locked');
+    $('#settingsLockMessage').show();
+  }, false ); 
+
   // settings form
 
   $('input[name=settingsMode]').change(function(){

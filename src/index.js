@@ -60,7 +60,7 @@ class Game {
 
     // launch button
 
-    this.enterBtn.addEventListener( 'click', () => this.onBlockerClick(), false );
+    this.enterBtn.addEventListener( 'click', () => this.onEnterClick(), false );
 
   }
 
@@ -468,7 +468,7 @@ class Game {
   
   }
 
-  onBlockerClick() {
+  onEnterClick() {
     this.init();
     this.initAudio();
     this.blocker.style.backgroundColor = '#25004bb9';
