@@ -17,6 +17,9 @@ class PlayerController {
 
 		this.key_shift = false;
 
+    this.key_plus = false;
+    this.key_minus = false;
+
 		this.key_f = false;
     this.key_r = false;
 		this.key_pressed_f = false;
@@ -79,48 +82,54 @@ class PlayerController {
 
 	on_key_down(event) {
 		if (this.enabled) {
-		  switch (event.keyCode) {
-				case 49: //1
+		  switch (event.code) {
+				case 'Digit1': //1
 		      this.key_pressed_1 = true;
 		      break;
-				case 50: //2
+				case 'Digit2': //2
 		      this.key_pressed_2 = true;
 		      break;
-				case 51: //3
+				case 'Digit3': //3
 		      this.key_pressed_3 = true;
 		      break;
-		    case 68: //d
+		    case 'KeyD': //d
 		      this.key_right = true;
 		      break;
-		    case 83: //s
+		    case 'KeyS': //s
 		      this.key_down = true;
 		      break;
-		    case 65: //a
+		    case 'KeyA': //a
 		      this.key_left = true;
 		      break;
-		    case 87: //w
+		    case 'KeyW': //w
 		      this.key_up = true;
 		      break;
-				case 16: //shift
+				case 'ShiftLeft': //shift
 		      this.key_shift = true;
 		      break;
-        case 219: //left bracket
+        case 'Equal': //plus
+		      this.key_plus = true;
+		      break;
+        case 'Minus': //minus
+		      this.key_minus = true;
+		      break;
+        case 'BracketLeft': //left bracket
 		      this.key_pressed_left_bracket = true;
 		      break;
-        case 221: //right bracket
+        case 'BracketRight': //right bracket
 		      this.key_pressed_right_bracket = true;
 		      break;
-        case 80: //p
+        case 'KeyP': //p
 		      this.key_pressed_p = true;
 		      break;
-        case 32: //space
+        case 'Space': //space
 		      this.key_pressed_space = true;
 		      break;
-		    case 70: //f
+		    case 'KeyF': //f
 		      this.key_f = true;
 		      this.key_pressed_f = true;
 		      break;
-				case 82: //r
+				case 'KeyR': //r
           this.key_r = true;
 		      this.key_pressed_r = true;
 		      break;
@@ -130,26 +139,32 @@ class PlayerController {
 
 	on_key_up(event) {
 		if (this.enabled) {
-		  switch (event.keyCode) {
-		    case 68: //d
+		  switch (event.code) {
+		    case 'KeyD': //d
 		      this.key_right = false;
 		      break;
-		    case 83: //s
+		    case 'KeyS': //s
 		      this.key_down = false;
 		      break;
-		    case 65: //a
+		    case 'KeyA': //a
 		      this.key_left = false;
 		      break;
-		    case 87: //w
+		    case 'KeyW': //w
 		      this.key_up = false;
 		      break;
-				case 16: //shift
+				case 'ShiftLeft': //shift
 		      this.key_shift = false;
 		      break;
-        case 70: //f
+        case 'Equal': //plus
+		      this.key_plus = false;
+		      break;
+        case 'Minus': //minus
+		      this.key_minus = false;
+		      break;
+        case 'KeyF': //f
 		      this.key_f = false;
 		      break;
-		    case 82: //r
+		    case 'KeyR': //r
 		      this.key_r = false;
 		      break;
 		  }

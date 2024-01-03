@@ -1,6 +1,6 @@
 // settings
 
-const version = '1.0.3';
+const version = '1.0.4';
 const threeVersion = '0.159.0';
 
 const curatedWorldSeeds = [
@@ -15,6 +15,7 @@ const controlsText = {
     'use your mouse to look around/steer',
     'press <space> to toggle autopilot',
     'hold <shift> to engage overdrive',
+    'use <+> and <-> to adjust volume',
     'press <]> to skip current song',
     'press <p> to pause current song',
     'press <esc> to open terminal'
@@ -23,6 +24,7 @@ const controlsText = {
     'use <w,a,s,d> to move camera',
     'use <r> and <f> to adjust height',
     'hold <shift> to increase speed',
+    'use <+> and <-> to adjust volume',
     'press <]> to skip current song',
     'press <p> to pause current song',
     'press <esc> to open terminal'

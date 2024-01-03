@@ -52,10 +52,11 @@ class Game {
     this.enterBtn = document.getElementById( 'enterBtn' );
     this.canvas = document.getElementById('canvas');
 
-    // fade in
+    // fade in / volume
 
     this.canvasOpacity = 0;
     this.masterVolume = 0;
+    this.userMasterVolume = 1;
 
     // launch button
 
@@ -375,9 +376,19 @@ class Game {
       this.canvas.style.opacity = this.canvasOpacity;
       // audio
       this.masterVolume += this.clockDelta*0.005;
-      if (this.audioListener) {
-        this.audioListener.setMasterVolume(this.masterVolume);
-      }
+    }
+
+    // master volume
+
+    if (this.playerController.key_plus) {
+      this.userMasterVolume = Math.min( this.userMasterVolume+0.02, 1 );
+    }
+    if (this.playerController.key_minus) {
+      this.userMasterVolume = Math.max( this.userMasterVolume-0.02, 0 );
+    }
+
+    if (this.audioListener) {
+      this.audioListener.setMasterVolume(this.masterVolume * this.userMasterVolume);
     }
 
     // update
