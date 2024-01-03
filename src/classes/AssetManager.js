@@ -26,7 +26,7 @@ class AssetManager {
     this.path = '';
 
     this.textureAnisotropy = 8;
-    this.buildingWindowsEmissiveIntensity = 1.5;
+    this.buildingWindowsEmissiveIntensity = window.game.environment.windowLights ? 1.5 : 0;;
     this.adsEmissiveIntensity = 0.1;
 
     this.textures = {};
@@ -68,6 +68,11 @@ class AssetManager {
     this.textures['sky_night'].colorSpace = SRGBColorSpace;
     this.textures['sky_night'].mapping = EquirectangularReflectionMapping;
     this.textures['sky_night'].magFilter = LinearFilter;
+
+    this.textures['sky_day'] = this.textureLoader.load(this.path+'textures/sky_day.jpg');
+    this.textures['sky_day'].colorSpace = SRGBColorSpace;
+    this.textures['sky_day'].mapping = EquirectangularReflectionMapping;
+    this.textures['sky_day'].magFilter = LinearFilter;
 
     this.textures['env_night'] = this.textureLoader.load(this.path+'textures/environment_night.jpg');
     this.textures['env_night'].mapping = EquirectangularReflectionMapping;
@@ -238,7 +243,7 @@ class AssetManager {
       map: this.getTexture('ground'),
       emissive: 0x0090ff,
       emissiveMap: this.getTexture('ground_em'),
-      emissiveIntensity: 0.2,
+      emissiveIntensity: window.game.environment.name=='night' ? 0.2 : 0,
       shininess: 0
     });
 

@@ -186,9 +186,16 @@ class Game {
 
     // bloom
     const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 0, 0, 0 );
-    bloomPass.threshold = 0.0;
-    bloomPass.strength = 7.0;
-    bloomPass.radius = 1.0;
+    if (this.environment.name=='night') {
+      bloomPass.threshold = 0.0;
+      bloomPass.strength = 7.0;
+      bloomPass.radius = 1.0;
+    }
+    else if (this.environment.name=='day') {
+      bloomPass.threshold = 0;
+      bloomPass.strength = 0.35;
+      bloomPass.radius = 1;
+    }
     this.composer.addPass( bloomPass );
 
     /*----- environment -----*/
@@ -426,6 +433,7 @@ class Game {
 
     const environments = {
       night: {
+        name: 'night',
         sky: 'sky_night',
         environmentMap: 'env_night',
         cityLights: true,
@@ -446,6 +454,30 @@ class Game {
         ambient: {
           color: 0x1b2c80,
           intensity: 0.5,
+        }
+      },
+      day: {
+        name: 'day',
+        sky: 'sky_day',
+        environmentMap: 'env_day',
+        cityLights: false,
+        windowLights: false,
+        spotLights: false,
+        fog: {
+          color: 0xaf6a3b,
+          start: -500,
+          end: 2700
+        },
+        sun: {
+          color: 0xffa25e,
+          intensity: 2,
+          x: 1,
+          y: 0.2,
+          z: 0.65,
+        },
+        ambient: {
+          color: 0x825233,
+          intensity: 0.65,
         }
       }
     };
