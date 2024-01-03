@@ -2,6 +2,8 @@
 
 SynthCity is an interactive WebGL experience built with [Three.js](https://threejs.org/). Sit back and relax while autopilot takes you for a ride, take the wheel and drive, or explore the endless world in freeroam mode - all while enjoying a curated synthwave playlist.
 
+![Screenshot](https://jeff-beene.com/synthcity/screenshots/readme.jpg)
+
 ## Setup
 
 - Prerequisites: [node.js](https://nodejs.org/en) and [webpack.js](https://webpack.js.org/)
