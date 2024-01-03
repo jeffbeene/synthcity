@@ -332,6 +332,20 @@ class Game {
             soundCarStress.play();
             self.player.soundStress = soundCarStress;
           });
+          const soundCarChimeUp = new Audio( this.audioListener );
+          this.audioLoader.load( 'assets/sounds/chime_up.wav', function( buffer ) {
+            soundCarChimeUp.setBuffer( buffer );
+            soundCarChimeUp.setLoop(false);
+            soundCarChimeUp.setVolume(1);
+            self.player.soundChimeUp = soundCarChimeUp;
+          });
+          const soundCarChimeDown = new Audio( this.audioListener );
+          this.audioLoader.load( 'assets/sounds/chime_down.wav', function( buffer ) {
+            soundCarChimeDown.setBuffer( buffer );
+            soundCarChimeDown.setLoop(false);
+            soundCarChimeDown.setVolume(1);
+            self.player.soundChimeDown = soundCarChimeDown;
+          });
         }
         // city sounds
         else {

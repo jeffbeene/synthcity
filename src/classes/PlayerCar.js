@@ -37,6 +37,8 @@ class PlayerCar {
 
     this.soundWind = null;
     this.soundStress = null;
+    this.soundChimeUp = null;
+    this.soundChimeDown = null;
 
 		// init
 
@@ -48,7 +50,10 @@ class PlayerCar {
     if (this.car) this.scene.add(this.car);
     if (this.car_windows) this.scene.add(this.car_windows);
 
-		this.camera = new PerspectiveCamera( 50, window.innerWidth / window.innerHeight, .15, 2800 );
+    this.camera_fov = 50;
+    this.camera_fov_to = this.camera_fov;
+
+		this.camera = new PerspectiveCamera( this.camera_fov, window.innerWidth / window.innerHeight, .15, 2800 );
 		this.camera.rotation.order = 'YXZ';
 		this.camera.rotation.y = Math.PI;
 		this.camera.position.y = this.player_height;
@@ -100,6 +105,15 @@ class PlayerCar {
 		// yaw
 		this.camera_target.rotation.y -= movementX*this.mouse_sensitivity;
 
+    // zoom
+    let mouse_wheel_delta = this.controller.get_mouse_wheel();
+    if (mouse_wheel_delta!==0) {
+      this.camera_fov_to += mouse_wheel_delta * 0.05;
+      this.camera_fov_to = Math.max( Math.min( this.camera_fov_to, 70 ), 30 );
+    }
+    this.camera.fov += (this.camera_fov_to-this.camera.fov)*0.1;
+    this.camera.updateProjectionMatrix();
+
 		// set camera postion to body position
 		this.camera.position.z = this.body.position.z;
 		this.camera.position.x = this.body.position.x;
@@ -114,9 +128,20 @@ class PlayerCar {
     /*--- UPDATE CAR ---*/
 
     if (this.controller.key_pressed_space) {
-      // on engage, autolevel
+      // on engage
       if (!this.autopilot) {
         this.car_pitch_to = 0;
+        if (this.soundChimeUp !== null) {
+          if (this.soundChimeUp.isPlaying) this.soundChimeUp.stop();
+          this.soundChimeUp.play();
+        }
+      }
+      // on disengage
+      else {
+        if (this.soundChimeDown !== null) {
+          if (this.soundChimeDown.isPlaying) this.soundChimeDown.stop();
+          this.soundChimeDown.play();
+        }
       }
       // disable autoaltitude
       this.autoaltitude = false;

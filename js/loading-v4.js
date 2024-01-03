@@ -12,7 +12,8 @@ const curatedWorldSeeds = [
 
 const controlsText = {
   drive: [
-    'use your mouse to look around/steer',
+    'use mouse to look around/steer',
+    'use mouse wheel to zoom',
     'press <space> to toggle autopilot',
     'hold <shift> to engage overdrive',
     'use <+> and <-> to adjust volume',
@@ -22,6 +23,7 @@ const controlsText = {
   ],
   freeroam: [
     'use <w,a,s,d> to move camera',
+    'use mouse wheel to zoom',
     'use <r> and <f> to adjust height',
     'hold <shift> to increase speed',
     'use <+> and <-> to adjust volume',
