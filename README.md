@@ -6,15 +6,14 @@ SynthCity is an interactive WebGL experience built with [Three.js](https://three
 
 ## Setup
 
-- Prerequisites: [node.js](https://nodejs.org/en) and [webpack.js](https://webpack.js.org/)
+- Requirements: [node.js](https://nodejs.org/en) and [webpack.js](https://webpack.js.org/)
 - Pull the repo to your local server
 - Run `npm install` to install dependencies
-- Update `index.html` to include the appropriate `main.[hash].js` file (for cache busting purposes)
 - Enjoy!
 
 ## Modifications
 
-- After making modifications to `src`, run `npm run build`
+- When making modifications to `src`, run `npm run build`
 - Update `index.html` to include the appropriate `main.[hash].js` file
 
 ## Credits
