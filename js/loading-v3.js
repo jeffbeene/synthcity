@@ -1,6 +1,6 @@
 // settings
 
-const version = '1.0.2';
+const version = '1.0.3';
 const threeVersion = '0.159.0';
 
 const curatedWorldSeeds = [

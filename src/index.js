@@ -445,13 +445,13 @@ class Game {
 
   onBlockerClick() {
     this.init();
+    this.initAudio();
+    this.blocker.style.backgroundColor = '#25004bb9';
+    this.blocker.classList.add('hide');
     this.controls.lock();
   }
   onControlsLock() {
     this.playerController.enabled = true;
-    this.blocker.style.backgroundColor = '#25004bb9';
-    this.blocker.classList.add('hide');
-    this.initAudio();
   }
   onControlsUnlock() {
     this.playerController.enabled = false;
