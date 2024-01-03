@@ -46,6 +46,13 @@ class Game {
 
     this.environment = this.getEnvironment('night');
 
+    // query params
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    this.uiOnUnfocus = true;
+    if (urlParams.has('uiOnUnfocus')) this.uiOnUnfocus = urlParams.get('uiOnUnfocus')==1 ? true : false;
+
     // elements
 
     this.blocker = document.getElementById( 'blocker' );
@@ -512,8 +519,9 @@ class Game {
   }
   onControlsUnlock() {
     this.playerController.enabled = false;
-    // this.blocker.style.display = 'block';
-    this.blocker.classList.remove('hide');
+    if (this.uiOnUnfocus) {
+      this.blocker.classList.remove('hide');
+    }
   }
 
 }

@@ -1,3 +1,7 @@
+# 1.0.5
+
+- Added `uiOnUnfocus` query param (for Wallpaper Engine)
+
 # 1.0.4
 
 - Added master volume control (plus/minus keys)
