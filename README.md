@@ -32,3 +32,7 @@ SynthCity is an interactive WebGL experience built with [Three.js](https://three
   - moodmaze> [uppbeat.io/browse/artist/mood-maze](https://uppbeat.io/browse/artist/mood-maze)
   - bosnow [uppbeat.io/browse/artist/bosnow](https://uppbeat.io/browse/artist/bosnow)
   - tecnosine [uppbeat.io/browse/artist/tecnosine](https://uppbeat.io/browse/artist/tecnosine)
+
+## Want to support projects like this?
+
+:coffee: [Buy me a coffee](https://www.paypal.com/donate/?business=DV5PFYEPQ59W4&no_recurring=0&item_name=Want+to+support+my+side-projects+or+buy+me+a+coffee?+Feel+free+to+leave+a+donation+below%21&currency_code=USD)
