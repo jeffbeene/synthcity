@@ -5,6 +5,9 @@ import {
   LinearFilter,
   SRGBColorSpace,
   RepeatWrapping,
+  BufferGeometry,
+  BufferGeometry,
+  Mesh,
   PlaneGeometry,
   MeshPhongMaterial,
   MeshStandardMaterial,
@@ -19,6 +22,8 @@ import {
 
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
+
 class AssetManager {
 
   constructor() {
@@ -32,6 +37,12 @@ class AssetManager {
     this.textures = {};
     this.models = {};
     this.materials = {};
+
+    // mesh bvh
+
+    BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+    BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+    Mesh.prototype.raycast = acceleratedRaycast;
 
   }
 
@@ -181,26 +192,74 @@ class AssetManager {
     });
 
     // buildings
-    this.objLoader.load(this.path+'models/s_01_01.obj', function (obj) { self.models['s_01_01'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_01_02.obj', function (obj) { self.models['s_01_02'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_01_03.obj', function (obj) { self.models['s_01_03'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_02_01.obj', function (obj) { self.models['s_02_01'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_02_02.obj', function (obj) { self.models['s_02_02'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_02_03.obj', function (obj) { self.models['s_02_03'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_03_01.obj', function (obj) { self.models['s_03_01'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_03_02.obj', function (obj) { self.models['s_03_02'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_03_03.obj', function (obj) { self.models['s_03_03'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_04_01.obj', function (obj) { self.models['s_04_01'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_04_02.obj', function (obj) { self.models['s_04_02'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_04_03.obj', function (obj) { self.models['s_04_03'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_05_01.obj', function (obj) { self.models['s_05_01'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_05_02.obj', function (obj) { self.models['s_05_02'] = obj.children[0].geometry; });
-    this.objLoader.load(this.path+'models/s_05_03.obj', function (obj) { self.models['s_05_03'] = obj.children[0].geometry; });
+    this.objLoader.load(this.path+'models/s_01_01.obj', function (obj) { 
+      self.models['s_01_01'] = obj.children[0].geometry;
+      self.models['s_01_01'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_01_02.obj', function (obj) { 
+      self.models['s_01_02'] = obj.children[0].geometry;
+      self.models['s_01_02'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_01_03.obj', function (obj) { 
+      self.models['s_01_03'] = obj.children[0].geometry;
+      self.models['s_01_03'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_02_01.obj', function (obj) { 
+      self.models['s_02_01'] = obj.children[0].geometry;
+      self.models['s_02_01'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_02_02.obj', function (obj) { 
+      self.models['s_02_02'] = obj.children[0].geometry;
+      self.models['s_02_02'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_02_03.obj', function (obj) { 
+      self.models['s_02_03'] = obj.children[0].geometry;
+      self.models['s_02_03'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_03_01.obj', function (obj) { 
+      self.models['s_03_01'] = obj.children[0].geometry;
+      self.models['s_03_01'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_03_02.obj', function (obj) { 
+      self.models['s_03_02'] = obj.children[0].geometry;
+      self.models['s_03_02'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_03_03.obj', function (obj) { 
+      self.models['s_03_03'] = obj.children[0].geometry;
+      self.models['s_03_03'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_04_01.obj', function (obj) { 
+      self.models['s_04_01'] = obj.children[0].geometry;
+      self.models['s_04_01'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_04_02.obj', function (obj) { 
+      self.models['s_04_02'] = obj.children[0].geometry;
+      self.models['s_04_02'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_04_03.obj', function (obj) { 
+      self.models['s_04_03'] = obj.children[0].geometry;
+      self.models['s_04_03'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_05_01.obj', function (obj) { 
+      self.models['s_05_01'] = obj.children[0].geometry;
+      self.models['s_05_01'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_05_02.obj', function (obj) { 
+      self.models['s_05_02'] = obj.children[0].geometry;
+      self.models['s_05_02'].computeBoundsTree();
+    });
+    this.objLoader.load(this.path+'models/s_05_03.obj', function (obj) { 
+      self.models['s_05_03'] = obj.children[0].geometry;
+      self.models['s_05_03'].computeBoundsTree();
+    });
 
     // mega buildings
     for (let i=0; i<6; i++) {
       let id = this.padNumber(i+1);
-      this.objLoader.load(this.path+'models/mega_'+id+'.obj', function (obj) { self.models['mega_'+id] = obj.children[0].geometry; });
+      this.objLoader.load(this.path+'models/mega_'+id+'.obj', function (obj) {
+        self.models['mega_'+id] = obj.children[0].geometry;
+        self.models['mega_'+id].computeBoundsTree();
+      });
     }
 
     // ads

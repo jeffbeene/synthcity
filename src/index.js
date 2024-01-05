@@ -16,6 +16,7 @@ import {
 } from 'three';
 
 import { PointerLockControls }  from 'three/examples/jsm/controls/PointerLockControls.js';
+
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -64,6 +65,11 @@ class Game {
     this.canvasOpacity = 0;
     this.masterVolume = 0;
     this.userMasterVolume = 1;
+
+    // Add the extension functions
+    THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+    THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+    THREE.Mesh.prototype.raycast = acceleratedRaycast;
 
     // launch button
 

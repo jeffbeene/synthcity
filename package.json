@@ -11,7 +11,8 @@
     "build": "webpack --mode production"
   },
   "dependencies": {
-    "three": "0.159.0"
+    "three": "0.159.0",
+    "three-mesh-bvh": "0.6.8"
   },
   "devDependencies": {
     "webpack": "^5.78.0",
