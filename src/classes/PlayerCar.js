@@ -18,16 +18,17 @@ class PlayerCar {
 
 		// settings
 
-		this.player_height = 250;//1.67;
-		this.mouse_sensitivity = 0.001;//0.002;
-		this.look_smooth = 0.1;//0.075;
+		this.player_height = 250;
+		this.mouse_sensitivity = 0.001;
+		this.look_smooth = 0.1;
 		this.look_roll_factor = -0.065;
 		this.max_look_speed = 200;
 
-		this.move_accel = 0.02;//0.01;
+		this.move_accel = 0.02;
 
-		this.walk_speed = 1;//0.01;
-		this.run_speed = 3;//0.2;
+    this.brake_speed = 0.4;
+		this.walk_speed = 0.8;
+		this.run_speed = 2.2;
 
 		this.light = new PointLight( 0x00d2ed, 0.25, 3 );
     this.light.decay = 1;
@@ -161,8 +162,8 @@ class PlayerCar {
     }
 
     // steering
-    this.car_dir_v += this.angle_dist(this.car_dir, this.car_dir_to)*0.00075;
-    this.car_pitch_v += this.angle_dist(this.car_pitch, this.car_pitch_to)*0.003;
+    this.car_dir_v += this.angle_dist(this.car_dir, this.car_dir_to)*0.001;
+    this.car_pitch_v += this.angle_dist(this.car_pitch, this.car_pitch_to)*0.004;
     // damping
     this.car_dir_v *= 0.965;
     this.car_pitch_v *= 0.965;
@@ -212,7 +213,9 @@ class PlayerCar {
     this.velocity.y += Math.sin(this.car_pitch) * accel;
 
     // max speed
-		this.move_max_speed = this.controller.key_shift ? this.run_speed : this.walk_speed;
+    this.move_max_speed = this.walk_speed;
+    if (this.controller.key_up || this.controller.key_shift) this.move_max_speed = this.run_speed;
+    else if (this.controller.key_down) this.move_max_speed = this.brake_speed;
     this.move_max_speed *= ( 1 + (-this.car_pitch / Math.PI ) * 2 );
 		if (this.move_max_speed_current < this.move_max_speed) this.move_max_speed_current = this.move_max_speed;
 		if (this.move_max_speed_current >= this.move_max_speed) this.move_max_speed_current -= this.move_accel*2;
@@ -239,7 +242,7 @@ class PlayerCar {
     /*--- COLLISION ---*/
 
     if (!this.crashed) {
-      if (window.game.collider.intersectsSphere(this.body.position, 3)) {
+      if (window.game.collider.intersectsSphere(this.body.position, 1)) {
         this.crashed = true;
         setTimeout( () => {
 

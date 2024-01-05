@@ -3,6 +3,11 @@
 - Collision detection
   - Implemented `three-mesh-bvh`
   - New Collider class manages collision with nearby meshes
+  - Upon collision, car resets to origin
+- Improved car handling
+  - Tightened up steering
+  - Use `W` or `Shift` to boost
+  - Use `S` to brake
 - PointerLock fix
   - Enter button fade in effect sometimes caused pointer lock to fail
 
