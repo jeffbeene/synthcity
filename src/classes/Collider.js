@@ -46,50 +46,59 @@ class Collider {
 
   }
 
-  // broken...
-  /*
   intersectsSphere(pos, rad) {
+
+    this.updateMeshesInRange(pos);
 
     const obj = new Object3D();
 		obj.position.set( pos.x, pos.y, pos.z )
 		obj.updateMatrixWorld();
 
-		for (let i=0; i<this.meshes.length; i++) {
-			let transformMatrix = new Matrix4().copy( this.meshes[i].matrixWorld ).invert().multiply( obj.matrixWorld );
-			let sphere = new Sphere( new Vector3(), rad );
+		for (let i=0; i<this.meshesInRange.length; i++) {
+			let transformMatrix = new Matrix4().copy( this.meshesInRange[i].matrixWorld ).invert().multiply( obj.matrixWorld );
+			let sphere = new Sphere( undefined, rad );
 			sphere.applyMatrix4( transformMatrix );
-			let hit = this.meshes[i].geometry.boundsTree.intersectsSphere( this.meshes[i], sphere );
+			let hit = this.meshesInRange[i].geometry.boundsTree.intersectsSphere( sphere );
 			if (hit) return true;
 		}
 
 		return false;
 
   }
-  */
 
   raycast(origin, dir) {
+
+    // update meshes
+    this.updateMeshesInRange(origin);
+
+    // raycast
+		this.rayCaster.set( origin, dir );
+		return this.rayCaster.intersectObjects(this.meshesInRange);
+
+	}
+
+  updateMeshesInRange(pos) {
 
     // determine whether to update meshesInRange
     let updateMeshesInRange = false;
     if (this.vectorFromPrev===null) {
-      this.vectorFromPrev = new Vector2(origin.x, origin.z);
+      this.vectorFromPrev = new Vector2(pos.x, pos.z);
       updateMeshesInRange = true;
     }
     else {
-      if (Math.round(origin.x/this.updateDist)*this.updateDist != Math.round(this.vectorFromPrev.x/this.updateDist)*this.updateDist ||
-          Math.round(origin.z/this.updateDist)*this.updateDist != Math.round(this.vectorFromPrev.y/this.updateDist)*this.updateDist)
+      if (Math.round(pos.x/this.updateDist)*this.updateDist != Math.round(this.vectorFromPrev.x/this.updateDist)*this.updateDist ||
+          Math.round(pos.z/this.updateDist)*this.updateDist != Math.round(this.vectorFromPrev.y/this.updateDist)*this.updateDist)
       {
-        this.vectorFromPrev.set(origin.x, origin.z);
+        this.vectorFromPrev.set(pos.x, pos.z);
         updateMeshesInRange = true;
       }
     }
 
     // update meshesInRange
     if (updateMeshesInRange) {
-      console.log('updateMeshesInRange');
       this.meshesInRange = [];
       for (let i=0; i<this.meshes.length; i++) {
-        this.vectorFrom.set( origin.x, origin.z );
+        this.vectorFrom.set( pos.x, pos.z );
         this.vectorTo.set( this.meshes[i].position.x, this.meshes[i].position.z );
         if ( this.vectorFrom.distanceTo(this.vectorTo) < this.maxDist ) {
           this.meshesInRange.push(this.meshes[i]);
@@ -104,11 +113,7 @@ class Collider {
       }
     }
 
-    // raycast
-		this.rayCaster.set( origin, dir );
-		return this.rayCaster.intersectObjects(this.meshesInRange);
-
-	}
+  }
 
 }
 
