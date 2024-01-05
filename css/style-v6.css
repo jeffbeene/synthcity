@@ -169,8 +169,7 @@ body {
 }
 
 #enterBtn {
-  pointer-events: none;
-  opacity: 0;
+  cursor: pointer;
   font-family: 'Share Tech Mono', monospace;
   font-size: 1.5rem;
   font-weight: bold;
@@ -182,16 +181,11 @@ body {
   color: #780a8f;
   box-shadow: 0 0 15px 0px var(--terminalsecondary);
   border-radius: 2px;
-  transition: opacity 1s, box-shadow 0.2s;
+  transition: box-shadow 0.2s;
   border-radius: 20px 0 20px 0;
 }
 #enterBtn:hover {
   box-shadow: 0 0 30px 0px var(--terminalsecondary);
-}
-#enterBtn.show {
-  opacity: 1;
-  pointer-events: all;
-  cursor: pointer;
 }
 
 /* settings form */

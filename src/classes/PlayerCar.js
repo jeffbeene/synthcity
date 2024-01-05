@@ -42,6 +42,8 @@ class PlayerCar {
 
 		// init
 
+    this.crashed = false;
+
     this.car = null;
     this.car_windows = null;
     this.car = new Mesh( window.game.assets.getModel('spinner'), [window.game.assets.getMaterial('spinner_interior'), window.game.assets.getMaterial('spinner_exterior')]);
@@ -120,7 +122,7 @@ class PlayerCar {
 		this.camera.position.y = this.body.position.y;
 
 		// roll
-		this.camera_target.rotation.z = -this.angle_dist(this.camera_target.rotation.y, this.camera.rotation.y)*this.look_roll_factor;
+    this.camera_target.rotation.z = -this.angle_dist(this.camera_target.rotation.y, this.camera.rotation.y)*this.look_roll_factor;
 
 		// smooth look
 		this.camera.quaternion.slerp(this.camera_target.quaternion, this.look_smooth);
@@ -165,14 +167,15 @@ class PlayerCar {
     this.car_dir_v *= 0.965;
     this.car_pitch_v *= 0.965;
     // update direction
-    this.car_dir += this.car_dir_v;
-    this.car_pitch += this.car_pitch_v;
+    if (!this.crashed) {
+      this.car_dir += this.car_dir_v;
+      this.car_pitch += this.car_pitch_v;
+    }
 
     this.car.rotation.set(0, this.car_dir, 0);
     var forward = new Vector3(0, 0, 1);
     var left = new Vector3(-1, 0, 0);
-    // this.car.rotateOnAxis(forward, this.angle_dist(this.car_dir,this.car_dir_to) * -0.5);
-    this.car.rotateOnAxis(forward, this.car_dir_v * -20);
+    if (!this.crashed) this.car.rotateOnAxis(forward, this.car_dir_v * -20);
     this.car.rotateOnAxis(left, this.car_pitch);
 
     this.car.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
@@ -217,10 +220,12 @@ class PlayerCar {
     // enforce max speed
     this.velocity.clampLength(0, this.move_max_speed_current);
 
-    // update body position (no collision)
-    this.body.position.x += this.velocity.x;
-    this.body.position.z += this.velocity.z;
-    this.body.position.y += this.velocity.y;
+    // update body position
+    if (!this.crashed) {
+      this.body.position.x += this.velocity.x;
+      this.body.position.z += this.velocity.z;
+      this.body.position.y += this.velocity.y;
+    }
 
     // min max altitude
 
@@ -229,6 +234,37 @@ class PlayerCar {
     }
     if (this.body.position.y>800) {
       this.body.position.y = 800;
+    }
+
+    /*--- COLLISION ---*/
+
+    if (!this.crashed) {
+      if (window.game.collider.intersectsSphere(this.body.position, 3)) {
+        this.crashed = true;
+        setTimeout( () => {
+
+          this.crashed = false;
+
+          this.car_dir = 0;
+          this.car_dir_v = 0;
+          this.car_dir_to = 0;
+          this.car_pitch = 0;
+          this.car_pitch_v = 0;
+          this.car_pitch_to = 0;
+
+          this.velocity.set(0, 0, 0);
+
+          this.camera.rotation.x = 0;
+          this.camera.rotation.y = Math.PI;
+          this.camera_target.rotation.x = this.camera.rotation.x;
+          this.camera_target.rotation.y = this.camera.rotation.y;
+
+          this.body.position.x = -window.game.roadWidth/2;
+          this.body.position.z = 0;
+          this.body.position.y = 150;
+
+        }, 3000);
+      }
     }
 
     /*--- UPDATE AUDIO ---*/

@@ -62,14 +62,6 @@ class Player {
 
 	update() {
 
-    // collision test
-    // if ( window.game.collider.raycast( this.camera.position, new Vector3(0, -1, 0) ).length > 0 ) {
-    //   console.log('collision below');
-    // }
-    if ( window.game.collider.intersectsSphere( this.camera.position, 5 ) ) {
-      console.log('collision');
-    }
-
 		/*--- UPDATE CAMERA ---*/
 
 		var movementX = this.controller.mouse_move_x;
@@ -106,7 +98,7 @@ class Player {
 		// smooth look
 		this.camera.quaternion.slerp(this.camera_target.quaternion, this.look_smooth);
 
-    /*--- UPDATE POSITION ---*/
+    /*--- UPDATE VELOCITY ---*/
 
     // accelerate
 		if (this.controller.key_up || this.controller.key_down || this.controller.key_left || this.controller.key_right) {
@@ -138,11 +130,13 @@ class Player {
 		if (this.move_max_speed_current > this.move_max_speed) this.move_max_speed_current -= this.move_accel;
 		this.velocity.clampLength(0, this.move_max_speed_current);
 
-    // update body position (no collision)
+    /*--- UPDATE POSITION ---*/
+
+    // x, z
     this.body.position.x += this.velocity.x * (this.body.position.y*0.01);
     this.body.position.z += this.velocity.z * (this.body.position.y*0.01);
 
-    // up down
+    // y
     if (this.controller.key_r) {
       this.body.position.y = this.body.position.y*1.02;
     }

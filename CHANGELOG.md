@@ -1,3 +1,11 @@
+# 1.0.6
+
+- Collision detection
+  - Implemented `three-mesh-bvh`
+  - New Collider class manages collision with nearby meshes
+- PointerLock fix
+  - Enter button fade in effect sometimes caused pointer lock to fail
+
 # 1.0.5
 
 - Added `uiOnUnfocus` query param (for Wallpaper Engine)

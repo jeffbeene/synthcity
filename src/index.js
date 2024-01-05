@@ -103,7 +103,7 @@ class Game {
     window.showCredits();
 
     // show launch button
-    document.getElementById('enterBtn').classList.add('show');
+    document.getElementById('enterBtn').style.display = 'block';
 
   }
 
@@ -447,6 +447,9 @@ class Game {
 
     this.composer.render();
     // this.renderer.render(this.scene, this.player.camera);
+
+    // start collision checking
+    if (!this.collider.enabled) this.collider.enabled = true;
 
   }
 

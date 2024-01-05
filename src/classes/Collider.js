@@ -12,7 +12,9 @@ class Collider {
 
   constructor() {
 
-    this.debug = true;
+    this.enabled = false;
+
+    this.debug = false;
 
     this.meshes = [];
 
@@ -48,6 +50,8 @@ class Collider {
 
   intersectsSphere(pos, rad) {
 
+    if (!this.enabled) return false;
+
     this.updateMeshesInRange(pos);
 
     const obj = new Object3D();
@@ -67,6 +71,8 @@ class Collider {
   }
 
   raycast(origin, dir) {
+
+    if (!this.enabled) return [];
 
     // update meshes
     this.updateMeshesInRange(origin);
