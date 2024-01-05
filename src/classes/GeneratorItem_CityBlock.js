@@ -1,6 +1,5 @@
 import {
-  Mesh,
-  PlaneGeometry
+  Mesh
 } from 'three';
 
 import { GeneratorUtils } from './GeneratorUtils.js';

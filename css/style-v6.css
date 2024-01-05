@@ -111,6 +111,21 @@ body {
   animation-timing-function: steps(5, end);
 }
 
+#crashMessage {
+  z-index: 500;
+  width: 100%;
+  height: 100dvh;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  background-color: #000000d7;
+  background-image: url('../img/scanline.png');
+  background-repeat: repeat;
+  backdrop-filter: blur(10px);
+}
+
 #terminal, #resources, #settings, #controls {
   height: calc(100% - 23px);
   overflow-y: scroll;

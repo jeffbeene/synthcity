@@ -75,6 +75,11 @@ class Game {
 
     this.enterBtn.addEventListener( 'click', () => this.onEnterClick(), false );
 
+    // world settings (do not change)
+
+    this.cityBlockSize = 128;
+    this.roadWidth = 24;
+
     // collision
 
     BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
@@ -173,7 +178,7 @@ class Game {
         scene: this.scene,
         renderer: this.renderer,
         controller: this.playerController,
-        x: -12,
+        x: -this.roadWidth/2,
         z: 0
       });
     }
@@ -243,9 +248,6 @@ class Game {
     this.scene.add( light_ambient );
 
     /*----- generators -----*/
-
-    this.cityBlockSize = 128;
-    this.roadWidth = 24;
 
     this.cityBlockNoise = new Perlin(this.settings.worldSeed);
     this.cityBlockNoise.noiseDetail(8, 0.5);
@@ -373,6 +375,13 @@ class Game {
             soundCarChimeDown.setLoop(false);
             soundCarChimeDown.setVolume(1);
             self.player.soundChimeDown = soundCarChimeDown;
+          });
+          const soundCarCrash = new Audio( this.audioListener );
+          this.audioLoader.load( 'assets/sounds/crash.wav', function( buffer ) {
+            soundCarCrash.setBuffer( buffer );
+            soundCarCrash.setLoop(false);
+            soundCarCrash.setVolume(1);
+            self.player.soundCrash = soundCarCrash;
           });
         }
         // city sounds

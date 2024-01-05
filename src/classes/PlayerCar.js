@@ -40,6 +40,7 @@ class PlayerCar {
     this.soundStress = null;
     this.soundChimeUp = null;
     this.soundChimeDown = null;
+    this.soundCrash = null;
 
 		// init
 
@@ -243,10 +244,16 @@ class PlayerCar {
 
     if (!this.crashed) {
       if (window.game.collider.intersectsSphere(this.body.position, 1)) {
+
         this.crashed = true;
+        document.getElementById('crashMessage').style.display = 'flex';
+
+        if (this.soundCrash) this.soundCrash.play();
+
         setTimeout( () => {
 
           this.crashed = false;
+          document.getElementById('crashMessage').style.display = 'none';
 
           this.car_dir = 0;
           this.car_dir_v = 0;
@@ -262,11 +269,12 @@ class PlayerCar {
           this.camera_target.rotation.x = this.camera.rotation.x;
           this.camera_target.rotation.y = this.camera.rotation.y;
 
-          this.body.position.x = -window.game.roadWidth/2;
-          this.body.position.z = 0;
-          this.body.position.y = 150;
+          this.body.position.x = Math.round(this.body.position.x / window.game.cityBlockSize) - window.game.roadWidth/2;
+          // this.body.position.x = -window.game.roadWidth/2;
+          // this.body.position.z = 0;
+          if (this.body.position.y<150) this.body.position.y = 150;
 
-        }, 3000);
+        }, 2000);
       }
     }
 
