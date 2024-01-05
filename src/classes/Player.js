@@ -1,4 +1,8 @@
-import * as THREE from 'three';
+import {
+  PerspectiveCamera,
+  Object3D,
+  Vector3
+} from 'three';
 
 class Player {
 
@@ -33,16 +37,16 @@ class Player {
     this.camera_fov = 80;
     this.camera_fov_to = this.camera_fov;
 
-		this.camera = new THREE.PerspectiveCamera( this.camera_fov, window.innerWidth / window.innerHeight, 1, 2800 );
+		this.camera = new PerspectiveCamera( this.camera_fov, window.innerWidth / window.innerHeight, 1, 2800 );
 		this.camera.rotation.order = 'YXZ';
 		this.camera.rotation.y = Math.PI;
 		this.camera.position.y = this.player_height;
 		
-		this.camera_target = new THREE.Object3D(); // used to get camera rotation set by PointerLockControls
+		this.camera_target = new Object3D(); // used to get camera rotation set by PointerLockControls
 		this.camera_target.rotation.order = 'YXZ';
 		this.camera_target.rotation.y = Math.PI;
 
-		this.body = new THREE.Object3D();
+		this.body = new Object3D();
 		this.body.position.x = params.x;
 		this.body.position.z = params.z;
 		this.body.position.y = this.player_height;
@@ -50,13 +54,18 @@ class Player {
     this.noise_shake = new Perlin();
     this.noise_shake.noiseDetail(8, 0.5);
 
-		this.velocity = new THREE.Vector3();
+		this.velocity = new Vector3();
 		this.move_max_speed = 0;
 		this.move_max_speed_current = 0;
 
   }
 
 	update() {
+
+    // collision test
+    // if ( window.game.collider.raycast( this.camera.position, new Vector3(0, -1, 0) ).length > 0 ) {
+    //   console.log('collision below');
+    // }
 
 		/*--- UPDATE CAMERA ---*/
 

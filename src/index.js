@@ -5,6 +5,8 @@ import {
   ACESFilmicToneMapping,
   SRGBColorSpace,
   PerspectiveCamera,
+  BufferGeometry,
+  Mesh,
   Vector2,
   Fog,
   DirectionalLight,
@@ -36,6 +38,9 @@ import { Generator } from './classes/Generator.js';
 import { GeneratorItem_CityBlock } from './classes/GeneratorItem_CityBlock.js';
 import { GeneratorItem_CityLight } from './classes/GeneratorItem_CityLight.js';
 import { GeneratorItem_Traffic } from './classes/GeneratorItem_Traffic.js';
+
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
+import { Collider } from './classes/Collider.js';
 
 window.game = new Game();
 
@@ -69,6 +74,14 @@ class Game {
     // launch button
 
     this.enterBtn.addEventListener( 'click', () => this.onEnterClick(), false );
+
+    // collision
+
+    BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+    BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+    Mesh.prototype.raycast = acceleratedRaycast;
+
+    this.collider = new Collider();
 
   }
 

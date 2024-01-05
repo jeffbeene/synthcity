@@ -5,23 +5,17 @@ import {
   LinearFilter,
   SRGBColorSpace,
   RepeatWrapping,
-  BufferGeometry,
-  Mesh,
   PlaneGeometry,
+  MeshBasicMaterial,
   MeshPhongMaterial,
   MeshStandardMaterial,
   MeshPhysicalMaterial,
-  ShaderMaterial,
   Color,
   AdditiveBlending,
-  DoubleSide,
-  MeshBasicMaterial,
-  Vector2
+  DoubleSide
 } from 'three';
 
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-
-import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
 
 class AssetManager {
 
@@ -36,12 +30,6 @@ class AssetManager {
     this.textures = {};
     this.models = {};
     this.materials = {};
-
-    // mesh bvh
-
-    BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
-    BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
-    Mesh.prototype.raycast = acceleratedRaycast;
 
   }
 
@@ -178,9 +166,7 @@ class AssetManager {
 
     /*----- models -----*/
 
-    this.objLoader.load(this.path+'models/storefronts.obj', function (obj) { self.models['storefronts'] = obj.children[0].geometry; });
-
-    // spinner
+    // car
     this.objLoader.load(this.path+'models/spinner.obj', function (obj) {
       self.models['spinner'] = obj.children[0].geometry;
       self.models['spinner'].rotateY(-Math.PI/2);
@@ -188,6 +174,15 @@ class AssetManager {
     this.objLoader.load(this.path+'models/spinner_windows.obj', function (obj) {
       self.models['spinner_windows'] = obj.children[0].geometry;
       self.models['spinner_windows'].rotateY(-Math.PI/2);
+    });
+
+    // ground plane
+    this.models['ground'] = new PlaneGeometry( window.game.cityBlockSize+window.game.roadWidth, window.game.cityBlockSize+window.game.roadWidth );
+
+    // storefronts
+    this.objLoader.load(this.path+'models/storefronts.obj', function (obj) {
+      self.models['storefronts'] = obj.children[0].geometry;
+      self.models['storefronts'].computeBoundsTree();
     });
 
     // buildings

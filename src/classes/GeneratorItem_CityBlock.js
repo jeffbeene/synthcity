@@ -18,7 +18,8 @@ class GeneratorItem_CityBlock {
     this.noise = window.game.cityBlockNoise;
     this.noiseFactor = window.game.cityBlockNoiseFactor;
 
-    this.meshes = [];
+    this.meshes = []; // no collision
+    this.meshesCollid = [];
     this.updateables = [];
 
     // buildings
@@ -53,7 +54,7 @@ class GeneratorItem_CityBlock {
           mesh.position.set( this.x+xOff, 0, this.z+zOff );
           mesh.scale.set(1, scale, 1);
           mesh.rotateY(rotate*Math.PI/180);
-          this.meshes.push(mesh);
+          this.meshesCollid.push(mesh);
 
         }
       }
@@ -123,7 +124,7 @@ class GeneratorItem_CityBlock {
           mesh.position.set( this.x+xOff, 0, this.z+zOff );
           mesh.scale.set(1, scale, 1);
           mesh.rotateY(rotate*Math.PI/180);
-          this.meshes.push(mesh);
+          this.meshesCollid.push(mesh);
 
           if (adsType!=null) {
             let ad = new Advert( this.x+xOff, 0, this.z+zOff, window.game.assets.getModel(adsType), false );
@@ -164,8 +165,7 @@ class GeneratorItem_CityBlock {
 
       // maybe have ads
       let adsType = null;
-      let adsMat = null;
-      let adsTypes, ads_mats;
+      let adsTypes;
       if ((Math.round(rotateNoise*100)%2==0)) {
         let adsNoise = this.utils.fixNoise(this.noise.noise((this.x+xOff)*6, (this.z+zOff)*6));
         if (isTower) {
@@ -183,7 +183,7 @@ class GeneratorItem_CityBlock {
       mesh.position.set( this.x+xOff, 0, this.z+zOff );
       mesh.scale.set(1, scale, 1);
       mesh.rotateY(rotate*Math.PI/180);
-      this.meshes.push(mesh);
+      this.meshesCollid.push(mesh);
 
       if (adsType!=null) {
         let ad = new Advert( this.x+xOff, 0, this.z+zOff, window.game.assets.getModel(adsType), isTower );
@@ -195,9 +195,7 @@ class GeneratorItem_CityBlock {
     }
 
     // ground plane
-    let geometry = new PlaneGeometry( this.cityBlockSize+this.roadWidth, this.cityBlockSize+this.roadWidth );
-    let groundMesh = new Mesh( geometry, window.game.assets.getMaterial('ground') );
-    // position
+    let groundMesh = new Mesh( window.game.assets.getModel('ground'), window.game.assets.getMaterial('ground') );
     groundMesh.rotateX(-Math.PI/2);
     groundMesh.position.set( this.x+(this.cityBlockSize/2), 0, this.z+(this.cityBlockSize/2) );
     this.meshes.push(groundMesh);
@@ -209,22 +207,32 @@ class GeneratorItem_CityBlock {
       if (!mat) mat = 'storefronts';
       var mesh = new Mesh( window.game.assets.getModel('storefronts'), window.game.assets.getMaterial(mat) );
       mesh.position.set( this.x+this.cityBlockSize+this.roadWidth/2, 0, this.z+this.cityBlockSize+this.roadWidth/2);
-      this.meshes.push(mesh);
+      this.meshesCollid.push(mesh);
     }
 
     // add meshes to scene
     for (var i=0; i<this.meshes.length; i++) {
       window.game.scene.add(this.meshes[i]);
     }
+    // add collision meshes to scene and collider
+    for (var i=0; i<this.meshesCollid.length; i++) {
+      window.game.scene.add(this.meshesCollid[i]);
+      window.game.collider.add(this.meshesCollid[i]);
+    }
 
   }
   remove() {
-    // remove meshes from scene
+    // remove meshes
     for (var i=0; i<this.meshes.length; i++) {
       window.game.scene.remove(this.meshes[i]);
     }
     for (var i=0; i<this.updateables.length; i++) {
       this.updateables[i].remove();
+    }
+    // remove collision meshes
+    for (var i=0; i<this.meshesCollid.length; i++) {
+      window.game.collider.remove(this.meshesCollid[i].uuid);
+      window.game.scene.remove(this.meshesCollid[i]);
     }
   }
   update() {
