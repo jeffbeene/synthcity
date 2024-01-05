@@ -66,11 +66,6 @@ class Game {
     this.masterVolume = 0;
     this.userMasterVolume = 1;
 
-    // Add the extension functions
-    THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
-    THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
-    THREE.Mesh.prototype.raycast = acceleratedRaycast;
-
     // launch button
 
     this.enterBtn.addEventListener( 'click', () => this.onEnterClick(), false );

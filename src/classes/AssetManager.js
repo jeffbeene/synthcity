@@ -6,7 +6,6 @@ import {
   SRGBColorSpace,
   RepeatWrapping,
   BufferGeometry,
-  BufferGeometry,
   Mesh,
   PlaneGeometry,
   MeshPhongMaterial,
