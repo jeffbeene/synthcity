@@ -63,9 +63,9 @@ class Player {
 	update() {
 
     // collision test
-    // if ( window.game.collider.raycast( this.camera.position, new Vector3(0, -1, 0) ).length > 0 ) {
-    //   console.log('collision below');
-    // }
+    if ( window.game.collider.raycast( this.camera.position, new Vector3(0, -1, 0) ).length > 0 ) {
+      console.log('collision below');
+    }
 
 		/*--- UPDATE CAMERA ---*/
 
