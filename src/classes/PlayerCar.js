@@ -269,9 +269,9 @@ class PlayerCar {
           this.camera_target.rotation.x = this.camera.rotation.x;
           this.camera_target.rotation.y = this.camera.rotation.y;
 
-          this.body.position.x = Math.round(this.body.position.x / window.game.cityBlockSize) - window.game.roadWidth/2;
-          // this.body.position.x = -window.game.roadWidth/2;
-          // this.body.position.z = 0;
+          // this.body.position.x = ( Math.round(this.body.position.x / window.game.cityBlockSize) * window.game.cityBlockSize ) - window.game.roadWidth/2;
+          this.body.position.x = -window.game.roadWidth/2;
+          this.body.position.z = 0;
           if (this.body.position.y<150) this.body.position.y = 150;
 
         }, 2000);
