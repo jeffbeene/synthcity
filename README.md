@@ -1,4 +1,4 @@
-# SynthCity - An Infinite Procedural Cyberpunk City
+# SynthCity - An Infinite Procedural Cyberpunk City - Fork by JPrester
 
 SynthCity is an interactive WebGL experience built with [Three.js](https://threejs.org/). Sit back and relax while autopilot takes you for a ride, take the wheel and drive, or explore the endless world in freeroam mode - all while enjoying a curated synthwave playlist.
 
@@ -15,8 +15,8 @@ SynthCity is an interactive WebGL experience built with [Three.js](https://three
 
 ## Modifications
 
-- When making modifications to `src`, run `npm run build`
-- Update `index.html` to include the appropriate `main.[hash].js` file
+- If you want to make changes to the code, comment out the link to the build output in `index.html` and run `npm start`. It will start webpack dev server and automatically reload the app when you make changes.
+- When done with the changes you want to deploy, run `npm run build`, uncomment the link to the build script in `index.html` and update the link with the newly generated hash number -> `dist/main.[hash].js`.
 
 ## Credits
 

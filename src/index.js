@@ -42,8 +42,6 @@ import { GeneratorItem_Traffic } from './classes/GeneratorItem_Traffic.js';
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
 import { Collider } from './classes/Collider.js';
 
-window.game = new Game();
-
 class Game {
 
   constructor() {
@@ -551,3 +549,5 @@ class Game {
   }
 
 }
+
+window.game = new Game();

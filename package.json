@@ -7,14 +7,18 @@
   "main": "index.js",
   "private": true,
   "scripts": {
+    "start": "webpack serve --mode development",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production"
   },
   "dependencies": {
     "three": "0.159.0",
-    "three-mesh-bvh": "0.6.8"
+    "three-mesh-bvh": "0.6.8",
+    "webpack-dev-server": "^4.15.1"
   },
   "devDependencies": {
+    "dotenv-webpack": "^8.0.1",
+    "html-webpack-plugin": "^5.6.0",
     "webpack": "^5.78.0",
     "webpack-cli": "^5.0.1"
   }
