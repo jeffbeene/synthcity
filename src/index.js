@@ -5,6 +5,8 @@ import {
   ACESFilmicToneMapping,
   SRGBColorSpace,
   PerspectiveCamera,
+  BufferGeometry,
+  Mesh,
   Vector2,
   Fog,
   DirectionalLight,
@@ -16,6 +18,7 @@ import {
 } from 'three';
 
 import { PointerLockControls }  from 'three/examples/jsm/controls/PointerLockControls.js';
+
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -35,6 +38,9 @@ import { Generator } from './classes/Generator.js';
 import { GeneratorItem_CityBlock } from './classes/GeneratorItem_CityBlock.js';
 import { GeneratorItem_CityLight } from './classes/GeneratorItem_CityLight.js';
 import { GeneratorItem_Traffic } from './classes/GeneratorItem_Traffic.js';
+
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
+import { Collider } from './classes/Collider.js';
 
 window.game = new Game();
 
@@ -69,6 +75,19 @@ class Game {
 
     this.enterBtn.addEventListener( 'click', () => this.onEnterClick(), false );
 
+    // world settings (do not change)
+
+    this.cityBlockSize = 128;
+    this.roadWidth = 24;
+
+    // collision
+
+    BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+    BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+    Mesh.prototype.raycast = acceleratedRaycast;
+
+    this.collider = new Collider();
+
   }
 
   load() {
@@ -89,7 +108,7 @@ class Game {
     window.showCredits();
 
     // show launch button
-    document.getElementById('enterBtn').classList.add('show');
+    document.getElementById('enterBtn').style.display = 'block';
 
   }
 
@@ -159,7 +178,7 @@ class Game {
         scene: this.scene,
         renderer: this.renderer,
         controller: this.playerController,
-        x: -12,
+        x: -this.roadWidth/2,
         z: 0
       });
     }
@@ -229,9 +248,6 @@ class Game {
     this.scene.add( light_ambient );
 
     /*----- generators -----*/
-
-    this.cityBlockSize = 128;
-    this.roadWidth = 24;
 
     this.cityBlockNoise = new Perlin(this.settings.worldSeed);
     this.cityBlockNoise.noiseDetail(8, 0.5);
@@ -360,6 +376,13 @@ class Game {
             soundCarChimeDown.setVolume(1);
             self.player.soundChimeDown = soundCarChimeDown;
           });
+          const soundCarCrash = new Audio( this.audioListener );
+          this.audioLoader.load( 'assets/sounds/crash.wav', function( buffer ) {
+            soundCarCrash.setBuffer( buffer );
+            soundCarCrash.setLoop(false);
+            soundCarCrash.setVolume(1);
+            self.player.soundCrash = soundCarCrash;
+          });
         }
         // city sounds
         else {
@@ -433,6 +456,9 @@ class Game {
 
     this.composer.render();
     // this.renderer.render(this.scene, this.player.camera);
+
+    // start collision checking
+    if (!this.collider.enabled) this.collider.enabled = true;
 
   }
 

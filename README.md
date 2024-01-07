@@ -10,7 +10,7 @@ SynthCity is an interactive WebGL experience built with [Three.js](https://three
 - Pull the repo
 - Run `npm install` to install dependencies
 - Setup your local server if you don't already have one. For Node, you can use [http-server](https://www.npmjs.com/package/http-server)
-- Run the local server in the root directory of the repo `http-server .`
+- Run the local server in the root directory of the repo `http-server`.
 - Enjoy!
 
 ## Modifications

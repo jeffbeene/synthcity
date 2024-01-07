@@ -21,7 +21,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="css/style-v5.css">
+    <link rel="stylesheet" href="css/style-v6.css">
 
   </head>
 
@@ -109,21 +109,24 @@
           <div class="tRow" style="height:25%">
             <div class="tHeader">#Controls</div>
             <div id="controls">&gt;&gt; No program loaded</div>
-            <!-- Fusce gravida egestas neque, id sodales arcu ultricies hendrerit. Maecenas quis justo gravida, semper nulla volutpat, pharetra mi. Sed ac ultricies dolor, dapibus euismod erat. Quisque in orci dolor. Suspendisse id laoreet eros, id volutpat purus. Nam hendrerit massa mauris, malesuada aliquam ipsum aliquam ut. Fusce turpis mauris, mollis ac purus vel, euismod luctus sem. Cras vitae dolor leo. Donec volutpat a arcu at consectetur. -->
           </div>
           <div class="tRow" style="height:32px;">
-            <button id="enterBtn">&gt;&gt;Launch&lt;&lt;</button>
+            <button id="enterBtn" style="display:none;">&gt;&gt;Launch&lt;&lt;</button>
           </div>
         </div>
       </div>
     </div>
 
+    <div id="crashMessage" style="display:none;">
+      <div class="g1">[ You crashed ]</div>
+    </div>
+
     <canvas id="canvas" style="opacity:0;"></canvas>
     
-    <script src="js/ui-v2.js"></script>
+    <script src="js/ui-v3.js"></script>
     <script src="js/alea.js"></script>
 		<script src="js/proc-noise.js"></script>
-    <script src="dist/main.5930e2c202e764ba4741.js" async></script>
+    <script src="dist/main.4840b40f143ef03913fc.js" async></script>
 
   </body>
 </html>

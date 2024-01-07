@@ -18,16 +18,17 @@ class PlayerCar {
 
 		// settings
 
-		this.player_height = 250;//1.67;
-		this.mouse_sensitivity = 0.001;//0.002;
-		this.look_smooth = 0.1;//0.075;
+		this.player_height = 250;
+		this.mouse_sensitivity = 0.001;
+		this.look_smooth = 0.1;
 		this.look_roll_factor = -0.065;
 		this.max_look_speed = 200;
 
-		this.move_accel = 0.02;//0.01;
+		this.move_accel = 0.02;
 
-		this.walk_speed = 1;//0.01;
-		this.run_speed = 3;//0.2;
+    this.brake_speed = 0.4;
+		this.walk_speed = 0.8;
+		this.run_speed = 2.2;
 
 		this.light = new PointLight( 0x00d2ed, 0.25, 3 );
     this.light.decay = 1;
@@ -39,8 +40,11 @@ class PlayerCar {
     this.soundStress = null;
     this.soundChimeUp = null;
     this.soundChimeDown = null;
+    this.soundCrash = null;
 
 		// init
+
+    this.crashed = false;
 
     this.car = null;
     this.car_windows = null;
@@ -120,7 +124,7 @@ class PlayerCar {
 		this.camera.position.y = this.body.position.y;
 
 		// roll
-		this.camera_target.rotation.z = -this.angle_dist(this.camera_target.rotation.y, this.camera.rotation.y)*this.look_roll_factor;
+    this.camera_target.rotation.z = -this.angle_dist(this.camera_target.rotation.y, this.camera.rotation.y)*this.look_roll_factor;
 
 		// smooth look
 		this.camera.quaternion.slerp(this.camera_target.quaternion, this.look_smooth);
@@ -159,20 +163,21 @@ class PlayerCar {
     }
 
     // steering
-    this.car_dir_v += this.angle_dist(this.car_dir, this.car_dir_to)*0.00075;
-    this.car_pitch_v += this.angle_dist(this.car_pitch, this.car_pitch_to)*0.003;
+    this.car_dir_v += this.angle_dist(this.car_dir, this.car_dir_to)*0.001;
+    this.car_pitch_v += this.angle_dist(this.car_pitch, this.car_pitch_to)*0.004;
     // damping
     this.car_dir_v *= 0.965;
     this.car_pitch_v *= 0.965;
     // update direction
-    this.car_dir += this.car_dir_v;
-    this.car_pitch += this.car_pitch_v;
+    if (!this.crashed) {
+      this.car_dir += this.car_dir_v;
+      this.car_pitch += this.car_pitch_v;
+    }
 
     this.car.rotation.set(0, this.car_dir, 0);
     var forward = new Vector3(0, 0, 1);
     var left = new Vector3(-1, 0, 0);
-    // this.car.rotateOnAxis(forward, this.angle_dist(this.car_dir,this.car_dir_to) * -0.5);
-    this.car.rotateOnAxis(forward, this.car_dir_v * -20);
+    if (!this.crashed) this.car.rotateOnAxis(forward, this.car_dir_v * -20);
     this.car.rotateOnAxis(left, this.car_pitch);
 
     this.car.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
@@ -209,7 +214,9 @@ class PlayerCar {
     this.velocity.y += Math.sin(this.car_pitch) * accel;
 
     // max speed
-		this.move_max_speed = this.controller.key_shift ? this.run_speed : this.walk_speed;
+    this.move_max_speed = this.walk_speed;
+    if (this.controller.key_up || this.controller.key_shift) this.move_max_speed = this.run_speed;
+    else if (this.controller.key_down) this.move_max_speed = this.brake_speed;
     this.move_max_speed *= ( 1 + (-this.car_pitch / Math.PI ) * 2 );
 		if (this.move_max_speed_current < this.move_max_speed) this.move_max_speed_current = this.move_max_speed;
 		if (this.move_max_speed_current >= this.move_max_speed) this.move_max_speed_current -= this.move_accel*2;
@@ -217,10 +224,12 @@ class PlayerCar {
     // enforce max speed
     this.velocity.clampLength(0, this.move_max_speed_current);
 
-    // update body position (no collision)
-    this.body.position.x += this.velocity.x;
-    this.body.position.z += this.velocity.z;
-    this.body.position.y += this.velocity.y;
+    // update body position
+    if (!this.crashed) {
+      this.body.position.x += this.velocity.x;
+      this.body.position.z += this.velocity.z;
+      this.body.position.y += this.velocity.y;
+    }
 
     // min max altitude
 
@@ -229,6 +238,44 @@ class PlayerCar {
     }
     if (this.body.position.y>800) {
       this.body.position.y = 800;
+    }
+
+    /*--- COLLISION ---*/
+
+    if (!this.crashed) {
+      if (window.game.collider.intersectsSphere(this.body.position, 1)) {
+
+        this.crashed = true;
+        document.getElementById('crashMessage').style.display = 'flex';
+
+        if (this.soundCrash) this.soundCrash.play();
+
+        setTimeout( () => {
+
+          this.crashed = false;
+          document.getElementById('crashMessage').style.display = 'none';
+
+          this.car_dir = 0;
+          this.car_dir_v = 0;
+          this.car_dir_to = 0;
+          this.car_pitch = 0;
+          this.car_pitch_v = 0;
+          this.car_pitch_to = 0;
+
+          this.velocity.set(0, 0, 0);
+
+          this.camera.rotation.x = 0;
+          this.camera.rotation.y = Math.PI;
+          this.camera_target.rotation.x = this.camera.rotation.x;
+          this.camera_target.rotation.y = this.camera.rotation.y;
+
+          // this.body.position.x = ( Math.round(this.body.position.x / window.game.cityBlockSize) * window.game.cityBlockSize ) - window.game.roadWidth/2;
+          this.body.position.x = -window.game.roadWidth/2;
+          this.body.position.z = 0;
+          if (this.body.position.y<150) this.body.position.y = 150;
+
+        }, 2000);
+      }
     }
 
     /*--- UPDATE AUDIO ---*/
